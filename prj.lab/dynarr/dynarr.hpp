@@ -7,7 +7,7 @@
 class Dynarr {
 private:
 	std::ptrdiff_t size_ = 0;
-	float data_ = 0;
+	float* data_ = 0;
 public:
 	Dynarr() = default;
 	~Dynarr() = default;
@@ -16,7 +16,14 @@ public:
 		size_ = size;
 	}
 	Dynarr& operator=(const Dynarr&) = default;
-	float& operator[]();
+
+	float& operator[](const std::ptrdiff_t idx);
+
+	const float& operator[](const std::ptrdiff_t idx) const;
+
+	std::ptrdiff_t Size() const noexcept;
+
+	void Resize(const std::ptrdiff_t size);
 };
 
 #endif
