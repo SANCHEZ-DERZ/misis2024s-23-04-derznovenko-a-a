@@ -8,22 +8,23 @@ class Dynarr {
 private:
 	std::ptrdiff_t size_ = 0;
 	float* data_ = 0;
+	std::ptrdiff_t capacity_ = 0;
 public:
-	Dynarr() = default;
-	~Dynarr() = default;
-	Dynarr(const Dynarr&) = default;
-	Dynarr(const std::ptrdiff_t size) {
-		size_ = size;
-	}
+	Dynarr();
+	~Dynarr();
+	Dynarr(const Dynarr&);
+	Dynarr(const std::ptrdiff_t size);
 	Dynarr& operator=(const Dynarr&) = default;
 
 	float& operator[](const std::ptrdiff_t idx);
 
-	const float& operator[](const std::ptrdiff_t idx) const;
-
-	std::ptrdiff_t Size() const noexcept;
+	std::ptrdiff_t Size() const noexcept {
+		return size_;
+	}
 
 	void Resize(const std::ptrdiff_t size);
+
+	void Push_back(float val) noexcept;
 };
 
 #endif
