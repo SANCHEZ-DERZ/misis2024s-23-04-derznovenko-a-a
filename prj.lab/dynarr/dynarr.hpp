@@ -14,7 +14,7 @@ public:
 	~Dynarr();
 	Dynarr(const Dynarr&);
 	Dynarr(const std::ptrdiff_t size);
-	Dynarr& operator=(const Dynarr&) = default;
+	Dynarr& operator=(const Dynarr&);
 
 	float& operator[](const std::ptrdiff_t idx);
 

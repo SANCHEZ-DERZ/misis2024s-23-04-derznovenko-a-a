@@ -7,13 +7,13 @@
 
 class StackArr {
 public:
-	StackArr() = default;
+	StackArr(); // = default;
 
-	StackArr(const StackArr&) = default;
+	StackArr(const StackArr&); // = default;
 
-	~StackArr() = default;
+	~StackArr(); // = default;
 
-	StackArr& operator=(const StackArr&) = default;
+	StackArr& operator=(const StackArr&); // = default;
 
 	bool IsEmpty() const noexcept;
 

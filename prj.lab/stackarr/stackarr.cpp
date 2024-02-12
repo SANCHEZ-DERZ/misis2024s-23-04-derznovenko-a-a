@@ -54,7 +54,7 @@ bool StackArr::IsEmpty() const noexcept {
 
 
 Complex& StackArr::Top() {
-	if (IsEmpty) {
+	if (size_ == 0) {
 		throw std::out_of_range("Stack is empty");
 	}
 	else {
