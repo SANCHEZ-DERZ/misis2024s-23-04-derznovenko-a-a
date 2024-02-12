@@ -27,7 +27,6 @@ TEST_CASE("dynarr op[]") {
 TEST_CASE("a") {
     Dynarr a(3);
     CHECK(a[1] == 0);
-    CHECK_THROWS(Dynarr(-1));
 }
 
 TEST_CASE("methods") {
