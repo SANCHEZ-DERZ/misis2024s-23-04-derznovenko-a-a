@@ -7,6 +7,19 @@ Dynarr::Dynarr() {
 	capacity_ = 0;
 }
 
+
+Dynarr& Dynarr::operator=(const Dynarr& arr) {
+	size_ = arr.size_;
+	capacity_ = size_ * 2;
+	delete[] data_;
+	data_ = new float[capacity_] {};
+	for (int i = 0; i < size_; i++) {
+		data_[i] = arr.data_[i];
+	}
+	return *this;
+}
+
+
 Dynarr::Dynarr(std::ptrdiff_t size) {
 	if (size < 0) {
 		throw std::overflow_error("Error: size cannot be less than zero");
