@@ -9,8 +9,8 @@ StackArr::StackArr() {
 
 
 StackArr::StackArr(const StackArr& arr) {
-	size_ = arr.size_;
 	i_top_ = arr.i_top_;
+	size_ = i_top_ * 2;
 	data_ = nullptr;
 	if (size_ != 0) {
 		data_ = new Complex[size_];
@@ -44,7 +44,7 @@ StackArr& StackArr::operator=(const StackArr& arr) {
 
 
 bool StackArr::IsEmpty() const noexcept {
-	if (size_ == 0) {
+	if (i_top_ == -1) {
 		return true;
 	}
 	else {
@@ -54,26 +54,32 @@ bool StackArr::IsEmpty() const noexcept {
 
 
 Complex& StackArr::Top() {
-	if (size_ == 0) {
+	if (i_top_ == -1) {
 		throw std::out_of_range("Stack is empty");
 	}
 	else {
-		i_top_ = size_ - 1;
 		return data_[i_top_];
 	}
 }
 
 
 void StackArr::Push(const Complex& val) {
-	if (size_ != 0) {
-		size_ += 1;
-		Complex* new_data = new Complex[size_]{};
-		for (int i = 0; i < size_; i++) {
-			new_data[i] = data_[i];
+	if (i_top_ != -1) {
+		if (size_ < i_top_ + 1) {
+			data_[i_top_ + 1] = val;
+			i_top_ += 1;
 		}
-		delete[] data_;
-		data_ = new_data;
-		data_[size_ - 1] = val;
+		else {
+			i_top_ += 1;
+			size_ = i_top_ * 2;
+			Complex* new_data = new Complex[size_]{};
+			for (int i = 0; i < size_; i++) {
+				new_data[i] = data_[i];
+			}
+			delete[] data_;
+			data_ = new_data;
+			data_[size_ - 1] = val;
+		}
 	}
 	else {
 		size_ += 1;
@@ -84,6 +90,22 @@ void StackArr::Push(const Complex& val) {
 
 
 void StackArr::Pop() noexcept {
+	i_top_ -= 1;
 }
 
 
+void StackArr::Clear() noexcept {
+	if (i_top_ != -1) {
+		i_top_ = -1;
+	}
+}
+
+
+const Complex& StackArr::Top() const {
+	if (i_top_ == -1) {
+		throw std::out_of_range("Stack is empty");
+	}
+	else {
+		return data_[i_top_];
+	}
+}
