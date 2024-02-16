@@ -3,7 +3,7 @@
 
 StackLst::StackLst() {
 	head_ = nullptr;
-	size_ = 0
+	size_ = 0;
 }
 
 
@@ -28,34 +28,36 @@ Complex& StackLst::Top() {
 
 
 void StackLst::Pop() noexcept {
-	if (head_ != nullptr && next_ != nullptr) {
-		Node* new_head = head_;
-		head_ = head_ -> next_;
-		delete[] new_head;
-		size_ -= 1;
-	}
-	else if (head_ != nullptr && next_ == nullptr) {
-		delete[] head_;
-		head_ = nullptr;
+	if (head_ != nullptr) {
+		if (head_->next != nullptr) {
+			Node* new_head = head_;
+			head_ = head_->next;
+			delete new_head;
+			size_ -= 1;
+		}
+		else {
+			delete head_;
+			head_ = nullptr;
+		}
 	}
 }
 
 
 void StackLst::Push(const Complex& val) {
-	Node* head = new Complex[];
-	head->value = val;
+	Node* new_head = new Node;
+	new_head->item = val;
 	if (head_ != nullptr) {
-		head->next = head_;
+		new_head->next = head_;
 	}
-	head_ = head;
+	head_ = new_head;
 	size_ += 1;
 }
 
 
 void StackLst::Clear() noexcept {
-	if (next_ != nullptr) {
+	if (head_->next != nullptr) {
 		for (int i = 0; i < size_; i++) {
-			*this->Pop();
+			this->Pop();
 		}
 	}
 }
@@ -79,7 +81,7 @@ StackLst& StackLst::operator=(const StackLst& lst) {
 		new_head = new_head->next;
 	}
 	for (int i = 0; i < lst.size_; i++) {
-		*this->Push(new_head->item);
+		this->Push(new_head->item);
 		new_head = new_head->next;
 	}
 	return *this;
@@ -98,7 +100,7 @@ StackLst::StackLst(const StackLst& lst) {
 		new_head = new_head->next;
 	}
 	for (int i = 0; i < lst.size_; i++) {
-		*this->Push(new_head->item);
+		this->Push(new_head->item);
 		new_head = new_head->next;
 	}
 }
