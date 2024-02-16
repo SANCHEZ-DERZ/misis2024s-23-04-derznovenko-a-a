@@ -32,12 +32,14 @@ StackArr::~StackArr() {
 
 
 StackArr& StackArr::operator=(const StackArr& arr) {
-	size_ = arr.size_;
-	i_top_ = arr.i_top_;
-	delete[] data_;
-	data_ = new Complex[size_]{};
-	for (int i = 0; i < size_; i++) {
-		data_[i] = arr.data_[i];
+	if (this != &arr) {
+		size_ = arr.size_;
+		i_top_ = arr.i_top_;
+		delete[] data_;
+		data_ = new Complex[size_]{};
+		for (int i = 0; i < size_; i++) {
+			data_[i] = arr.data_[i];
+		}
 	}
 	return *this;
 }
@@ -78,11 +80,12 @@ void StackArr::Push(const Complex& val) {
 			}
 			delete[] data_;
 			data_ = new_data;
-			data_[size_ - 1] = val;
+			data_[i_top_] = val;
 		}
 	}
 	else {
 		size_ += 1;
+		i_top_ += 1;
 		data_ = new Complex[size_];
 		data_[0] = val;
 	}
