@@ -38,6 +38,7 @@ void StackLst::Pop() noexcept {
 		else {
 			delete head_;
 			head_ = nullptr;
+			size_ -= 1;
 		}
 	}
 }
@@ -55,11 +56,10 @@ void StackLst::Push(const Complex& val) {
 
 
 void StackLst::Clear() noexcept {
-	if (head_->next != nullptr) {
-		for (int i = 0; i < size_; i++) {
-			this->Pop();
-		}
+	while (head_ != nullptr) {
+		this->Pop();
 	}
+	size_ = 0;
 }
 
 
@@ -74,15 +74,17 @@ const Complex& StackLst::Top() const {
 
 
 StackLst& StackLst::operator=(const StackLst& lst) {
-	StackLst new_lst;
-	Node* new_head = lst.head_;
-	for (int i = 0; i < lst.size_; i++) {
-		new_lst.Push(new_head->item);
-		new_head = new_head->next;
-	}
-	for (int i = 0; i < lst.size_; i++) {
-		this->Push(new_head->item);
-		new_head = new_head->next;
+	if (this != &lst) {
+		StackLst new_lst;
+		Node* new_head = lst.head_;
+		for (int i = 0; i < lst.size_; i++) {
+			new_lst.Push(new_head->item);
+			new_head = new_head->next;
+		}
+		for (int i = 0; i < lst.size_; i++) {
+			this->Push(new_head->item);
+			new_head = new_head->next;
+		}
 	}
 	return *this;
 }
@@ -93,14 +95,10 @@ StackLst::~StackLst() {
 
 
 StackLst::StackLst(const StackLst& lst) {
-	StackLst new_lst;
+	size_ = lst.size_;
 	Node* new_head = lst.head_;
-	for (int i = 0; i < lst.size_; i++) {
-		new_lst.Push(new_head->item);
-		new_head = new_head->next;
-	}
-	for (int i = 0; i < lst.size_; i++) {
+	for (int i = 0; i < size_; i++) {
 		this->Push(new_head->item);
-		new_head = new_head->next;
+		new_head = head_->next;
 	}
 }
