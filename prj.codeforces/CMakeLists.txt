@@ -1,0 +1,1 @@
+add_executable(1722a 1722a.cpp)
