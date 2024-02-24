@@ -1,1 +1,5 @@
 add_executable(1722a 1722a.cpp)
+add_executable(1374a 1374a.cpp)
+add_executable(1426a 1426a.cpp)
+add_executable(1873b 1873b.cpp)
+add_executable(1360a 1360a.cpp)

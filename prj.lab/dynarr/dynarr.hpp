@@ -18,6 +18,10 @@ public:
 
 	float& operator[](const std::ptrdiff_t idx);
 
+	const float& operator[](const std::ptrdiff_t idx) const { 
+		return data_[idx]; 
+	}
+
 	std::ptrdiff_t Size() const noexcept {
 		return size_;
 	}
