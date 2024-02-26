@@ -12,12 +12,7 @@ StackArr::StackArr(const StackArr& arr) {
 	i_top_ = arr.i_top_;
 	size_ = i_top_ * 2;
 	data_ = nullptr;
-	if (size_ != 0) {
-		data_ = new Complex[size_];
-	}
-	else {
-		data_ = 0;
-	}
+	data_ = new Complex[size_];
 	for (int i = 0; i < size_; i++) {
 		data_[i] = arr.data_[i];
 	}
@@ -66,15 +61,15 @@ Complex& StackArr::Top() {
 
 
 void StackArr::Push(const Complex& val) {
-	if (i_top_ != -1) {
-		if (size_ < i_top_ + 1) {
+	if (data_ != nullptr) {
+		if (size_ > i_top_ + 1) {
 			data_[i_top_ + 1] = val;
 			i_top_ += 1;
 		}
 		else {
 			i_top_ += 1;
 			size_ = i_top_ * 2;
-			Complex* new_data = new Complex[size_]{};
+			Complex* new_data = new Complex[size_];
 			for (int i = 0; i < size_; i++) {
 				new_data[i] = data_[i];
 			}
@@ -87,20 +82,20 @@ void StackArr::Push(const Complex& val) {
 		size_ += 1;
 		i_top_ += 1;
 		data_ = new Complex[size_];
-		data_[0] = val;
+		data_[i_top_] = val;
 	}
 }
 
 
 void StackArr::Pop() noexcept {
-	i_top_ -= 1;
+	if (size_ != 0) {
+		i_top_ -= 1;
+	}
 }
 
 
 void StackArr::Clear() noexcept {
-	if (i_top_ != -1) {
-		i_top_ = -1;
-	}
+	i_top_ = -1;
 }
 
 

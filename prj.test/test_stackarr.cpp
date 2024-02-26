@@ -47,3 +47,13 @@ TEST_CASE("Cycle") {
 	st.Pop();
 	CHECK_EQ(st.Top(), Complex{999.0, 0});
 }
+
+TEST_CASE("Copy") {
+	StackArr st;
+	Complex a{ 1.5, 2.0 };
+	Complex b{ 2.0, 3.0 };
+	st.Push(a);
+	st.Push(b);
+	StackArr cpy(st);
+	CHECK_EQ(cpy.Top(), b);
+}
