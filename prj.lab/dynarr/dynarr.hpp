@@ -5,10 +5,12 @@
 #include <cstddef>
 
 class Dynarr {
+
 private:
 	std::ptrdiff_t size_ = 0;
 	float* data_ = 0;
 	std::ptrdiff_t capacity_ = 0;
+
 public:
 	Dynarr();
 	~Dynarr();
