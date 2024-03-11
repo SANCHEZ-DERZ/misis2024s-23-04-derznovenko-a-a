@@ -1,19 +1,21 @@
 #pragma once
-#ifndef STACKLST_STACKLST_HPP_20240213
-#define STACKLST_STACKLST_HPP_20240213
+#ifndef QUEUELST_QUEUELST_HPP_20240220
+#define QUEUELST_QUEUELST_HPP_20240220
 
 #include <cstddef>
 #include "complex/complex.hpp"
+#include <vector>
+#include <algorithm>
 
-class StackLst {
+class QueueLst {
 public:
-	StackLst();
+	QueueLst();
 
-	StackLst(const StackLst& lst);
+	QueueLst(const QueueLst& que);
 
-	~StackLst();
+	~QueueLst();
 
-	StackLst& operator=(const StackLst& lst);
+	QueueLst& operator=(const QueueLst& que);
 
 	bool IsEmpty() const noexcept;
 
@@ -34,6 +36,7 @@ private:
 	};
 	Node* head_ = nullptr;
 	std::ptrdiff_t size_ = 0;
+	Node* tail_ = nullptr;
 };
 
 #endif // !STACKARR_STACKARR_HPP_20240203
