@@ -25,8 +25,6 @@ public:
 
 	Complex& Top();
 
-	const Complex& Top() const;
-
 	void Clear() noexcept;
 
 private:

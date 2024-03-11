@@ -28,14 +28,6 @@ Complex& QueueLst::Top() {
 }
 
 
-const Complex& QueueLst::Top() const {
-	if (IsEmpty()) {
-		throw std::logic_error("QueueLst - trying to get top from empty queue.");
-	}
-	return head_->item;
-}
-
-
 void QueueLst::Pop() noexcept {
 	if (head_ != nullptr) {
 		Node* new_head = head_;
