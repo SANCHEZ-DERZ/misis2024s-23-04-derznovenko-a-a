@@ -64,13 +64,25 @@ TEST_CASE("Cycle") {
 	CHECK_EQ(st.IsEmpty(), 1);
 }
 
-/*
+
 TEST_CASE("Copy") {
 	QueueLst st;
 	Complex a{ 1.5, 2.0 };
 	Complex b{ 2.0, 3.0 };
 	st.Push(a);
+	st.Push(b);
 	QueueLst cpy(st);
-	cpy.Top();
+	CHECK_EQ(cpy.Top(), st.Top());
 }
-*/
+
+
+TEST_CASE("Operator=") {
+	QueueLst st;
+	QueueLst cpy;
+	Complex a{ 1.5, 2.0 };
+	Complex b{ 2.0, 3.0 };
+	st.Push(a);
+	st.Push(b);
+	cpy = st;
+	CHECK_EQ(cpy.Top(), st.Top());
+}

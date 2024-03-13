@@ -67,33 +67,22 @@ QueueLst::~QueueLst() {
 }
 
 
-QueueLst::QueueLst(const QueueLst& que) {
-	size_ = que.size_;
-	head_ = que.head_;
-	tail_ = que.tail_;
-	std::vector<Complex> bufer;
-	for (int i = 0; i < size_; i++) {
-		bufer.push_back(head_->item);
-		head_ = head_->next;
-	}
-	for (int i = 0; i < size_; i++) {
-		Push(bufer[i]);
+QueueLst::QueueLst(const QueueLst& other) {
+	Node* current = other.head_;
+	while (current) {
+		Push(current->item);
+		current = current->next;
 	}
 }
 
 
 QueueLst& QueueLst::operator=(const QueueLst& que) {
 	if (this != &que) {
-		size_ = que.size_;
-		head_ = que.head_;
-		tail_ = que.tail_;
-		std::vector<Complex> bufer;
-		for (int i = 0; i < size_; i++) {
-			bufer.push_back(head_->item);
-			head_ = head_->next;
-		}
-		for (int i = 0; i < size_; i++) {
-			Push(bufer[i]);
+		Clear();
+		Node* current = que.head_;
+		while (current) {
+			Push(current->item);
+			current = current->next;
 		}
 	}
 	return *this;

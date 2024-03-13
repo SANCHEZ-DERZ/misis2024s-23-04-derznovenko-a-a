@@ -11,11 +11,11 @@ class QueueLst {
 public:
 	QueueLst();
 
-	QueueLst(const QueueLst& que);
+	QueueLst(const QueueLst&);
 
 	~QueueLst();
 
-	QueueLst& operator=(const QueueLst& que);
+	QueueLst& operator=(const QueueLst&);
 
 	bool IsEmpty() const noexcept;
 
