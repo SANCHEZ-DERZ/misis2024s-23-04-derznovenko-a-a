@@ -3,18 +3,18 @@
 #include "dynarr/dynarr.hpp"
 
 TEST_CASE("dynarr ctor") {
-    Dynarr arr_def;
+    DynArr arr_def;
     CHECK_EQ(arr_def.Size(), 0);
     const int size = 5;
-    Dynarr arr_s(size);
+    DynArr arr_s(size);
     CHECK_EQ(arr_s.Size(), size);
-    CHECK_THROWS(void(Dynarr(-size)));
+    CHECK_THROWS(void(DynArr(-size)));
 }
 
 TEST_CASE("dynarr op[]") {
     const int size = 5;
-    Dynarr arr(size);
-    Dynarr arr2(10);
+    DynArr arr(size);
+    DynArr arr2(10);
     CHECK_EQ(arr[0], 0);
     CHECK_EQ(arr[arr.Size() - 1], 0);
     CHECK_EQ(arr[0], arr[1]);
@@ -24,12 +24,12 @@ TEST_CASE("dynarr op[]") {
 }
 
 TEST_CASE("a") {
-    Dynarr a(3);
+    DynArr a(3);
     CHECK(a[1] == 0);
 }
 
 TEST_CASE("methods") {
-    Dynarr a(5);
+    DynArr a(5);
     a[0] = 100;
     a[1] = 1;
     a[3] = 3;
@@ -46,7 +46,7 @@ TEST_CASE("methods") {
 }
 
 TEST_CASE("basic operations") {
-    Dynarr a(5);
+    DynArr a(5);
     for (int i = 0; i < a.Size(); ++i) {
         a[i] = i + 0.5;
     }
@@ -61,7 +61,7 @@ TEST_CASE("basic operations") {
 
 TEST_CASE("def") {
     const int s = 100;
-    Dynarr a(s);
+    DynArr a(s);
     for (int i = 0; i < a.Size(); ++i) {
         a[i] = i;
     }
@@ -71,17 +71,17 @@ TEST_CASE("def") {
 }
 
 TEST_CASE("Copy constructor") {
-    Dynarr a;
+    DynArr a;
     a.Push_back(5);
     a.Push_back(10);
-    Dynarr b(a);
+    DynArr b(a);
     CHECK_EQ(a[0], b[0]);
 }
 
 TEST_CASE("operator=") {
-    Dynarr a;
+    DynArr a;
     a.Push_back(5);
     a.Push_back(10);
-    Dynarr b = a;
+    DynArr b = a;
     CHECK_EQ(a[0], b[0]);
 }

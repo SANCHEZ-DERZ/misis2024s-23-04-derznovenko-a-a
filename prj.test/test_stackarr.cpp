@@ -2,58 +2,126 @@
 #include "doctest.h"
 #include "stackarr/stackarr.hpp"
 
-TEST_CASE("stack IsEmpty") {
-	StackArr st;
-	Complex a{ 1.5, 2.0 };
-	CHECK_EQ(st.IsEmpty(), 1);
-	st.Push(a);
-	CHECK_EQ(st.IsEmpty(), 0);
+TEST_CASE("Constructor") {
+    StackArr stack;
+    CHECK(stack.IsEmpty());
+}
+
+TEST_CASE("Push") {
+    StackArr stack;
+    Complex c(1, 2);
+    stack.Push(c);
+    CHECK_FALSE(stack.IsEmpty());
+    CHECK_EQ(stack.Top(), c);
 }
 
 TEST_CASE("Pop") {
-	StackArr st;
-	Complex a{ 1.5, 2.0 };
-	st.Push(a);
-	CHECK_EQ(st.IsEmpty(), 0);
-	st.Pop();
-	CHECK_EQ(st.IsEmpty(), 1);
+    StackArr stack;
+    Complex c(1, 2);
+    stack.Push(c);
+    stack.Pop();
+    CHECK(stack.IsEmpty());
 }
 
-TEST_CASE("Top") {
-	StackArr st;
-	Complex a{ 1.5, 2.0 };
-	st.Push(a);
-	CHECK_EQ(st.Top(), a);
+TEST_CASE("Copy constructor") {
+    StackArr stack;
+    Complex c{ 1, 2 };
+    stack.Push(c);
+    StackArr stack2(stack);
+    CHECK_FALSE(stack.IsEmpty());
+    CHECK_FALSE(stack2.IsEmpty());
+    CHECK_EQ(stack.Top(), c);
+    CHECK_EQ(stack2.Top(), c);
+    stack.Pop();
+    CHECK(stack.IsEmpty());
+    CHECK_FALSE(stack2.IsEmpty());
+    CHECK_EQ(stack2.Top(), c);
+}
+
+TEST_CASE("Assignment operator") {
+    StackArr stack;
+    Complex c(1, 2);
+    stack.Push(c);
+    StackArr stack2;
+    stack2 = stack;
+    CHECK_FALSE(stack.IsEmpty());
+    CHECK_FALSE(stack2.IsEmpty());
+    CHECK_EQ(stack.Top(), c);
+    CHECK_EQ(stack2.Top(), c);
+    stack.Pop();
+    CHECK(stack.IsEmpty());
+    CHECK_FALSE(stack2.IsEmpty());
+    CHECK_EQ(stack2.Top(), c);
 }
 
 TEST_CASE("Clear") {
-	StackArr st;
-	Complex a{ 1.5, 2.0 };
-	st.Push(a);
-	st.Clear();
-	CHECK_EQ(st.IsEmpty(), 1);
+    StackArr stack;
+    Complex c(1, 2);
+    stack.Push(c);
+    stack.Clear();
+    CHECK(stack.IsEmpty());
 }
 
-TEST_CASE("Cycle") {
-	StackArr st;
-	Complex a;
-	float b = 0;
-	for (int i = 0; i < 1000; i++) {
-		b += 1.0;
-		a = { b, 0 };
-		st.Push(a);
-	}
-	CHECK_EQ(st.Top(), Complex{ b, 0 });
-	st.Pop();
-	CHECK_EQ(st.Top(), Complex{999.0, 0});
+TEST_CASE("Push and Pop") {
+    StackArr stack;
+    Complex c1(1, 2);
+    Complex c2(3, 4);
+    stack.Push(c1);
+    stack.Push(c2);
+    CHECK_EQ(stack.Top(), c2);
+    stack.Pop();
+    CHECK_EQ(stack.Top(), c1);
+    stack.Pop();
+    CHECK(stack.IsEmpty());
 }
 
-TEST_CASE("Copy") {
-	StackArr st;
-	Complex a{ 1.5, 2.0 };
-	Complex b{ 2.0, 3.0 };
-	st.Push(a);
-	st.Push(b);
-	StackArr cpy(st);
-	CHECK_EQ(cpy.Top(), b);
+TEST_CASE("Push and Pop with resizing") {
+    StackArr stack;
+    Complex value;
+    for (ptrdiff_t i = 0; i < 1000; ++i) {
+        value = Complex(i, i);
+        stack.Push(value);
+    }
+    for (ptrdiff_t i = 999; i >= 0; --i) {
+        CHECK_EQ(stack.Top(), Complex(i, i));
+        stack.Pop();
+    }
+    CHECK(stack.IsEmpty());
+}
+
+TEST_CASE("Push and Pop with resizing and copy") {
+    StackArr stack;
+    Complex value;
+    for (ptrdiff_t i = 0; i < 1000; ++i) {
+        value = Complex(i, i);
+        stack.Push(value);
+    }
+    StackArr stack2(stack);
+    for (ptrdiff_t i = 999; i >= 0; --i) {
+        CHECK_EQ(stack.Top(), Complex(i, i));
+        CHECK_EQ(stack2.Top(), Complex(i, i));
+        stack.Pop();
+        stack2.Pop();
+    }
+    CHECK(stack.IsEmpty());
+    CHECK(stack2.IsEmpty());
+}
+
+TEST_CASE("Push and Pop with resizing and assignment") {
+    StackArr stack;
+    Complex value;
+    for (ptrdiff_t i = 0; i < 1000; ++i) {
+        value = Complex(i, i);
+        stack.Push(value);
+    }
+    StackArr stack2;
+    stack2 = stack;
+    for (ptrdiff_t i = 999; i >= 0; --i) {
+        CHECK_EQ(stack.Top(), Complex(i, i));
+        CHECK_EQ(stack2.Top(), Complex(i, i));
+        stack.Pop();
+        stack2.Pop();
+    }
+    CHECK(stack.IsEmpty());
+    CHECK(stack2.IsEmpty());
 }

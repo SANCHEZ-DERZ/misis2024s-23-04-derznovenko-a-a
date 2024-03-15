@@ -1,4 +1,5 @@
 #include "stackarr/stackarr.hpp"
+#include <algorithm>
 
 
 StackArr::StackArr() {
@@ -10,12 +11,9 @@ StackArr::StackArr() {
 
 StackArr::StackArr(const StackArr& arr) {
 	i_top_ = arr.i_top_;
-	size_ = i_top_ * 2;
-	data_ = nullptr;
+	size_ = arr.size_;
 	data_ = new Complex[size_];
-	for (int i = 0; i < size_; i++) {
-		data_[i] = arr.data_[i];
-	}
+	std::copy(arr.data_, arr.data_ + arr.size_, data_);
 }
 
 
