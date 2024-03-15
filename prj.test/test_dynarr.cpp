@@ -8,7 +8,6 @@ TEST_CASE("dynarr ctor") {
     const int size = 5;
     Dynarr arr_s(size);
     CHECK_EQ(arr_s.Size(), size);
-    //CHECK_THROWS(void(DynArr(0)));
     CHECK_THROWS(void(Dynarr(-size)));
 }
 
@@ -69,4 +68,20 @@ TEST_CASE("def") {
     for (int i = 0; i < s; ++i) {
         CHECK(a[i] == i);
     }
+}
+
+TEST_CASE("Copy constructor") {
+    Dynarr a;
+    a.Push_back(5);
+    a.Push_back(10);
+    Dynarr b(a);
+    CHECK_EQ(a[0], b[0]);
+}
+
+TEST_CASE("operator=") {
+    Dynarr a;
+    a.Push_back(5);
+    a.Push_back(10);
+    Dynarr b = a;
+    CHECK_EQ(a[0], b[0]);
 }

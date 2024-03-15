@@ -4,7 +4,7 @@
 
 #include <cstddef>
 
-class Dynarr {
+class DynArr {
 
 private:
 	std::ptrdiff_t size_ = 0;
@@ -12,11 +12,11 @@ private:
 	std::ptrdiff_t capacity_ = 0;
 
 public:
-	Dynarr();
-	~Dynarr();
-	Dynarr(const Dynarr&);
-	Dynarr(const std::ptrdiff_t size);
-	Dynarr& operator=(const Dynarr&);
+	DynArr();
+	~DynArr();
+	DynArr(const DynArr&);
+	DynArr(const std::ptrdiff_t size);
+	DynArr& operator=(const DynArr&);
 
 	float& operator[](const std::ptrdiff_t idx);
 
