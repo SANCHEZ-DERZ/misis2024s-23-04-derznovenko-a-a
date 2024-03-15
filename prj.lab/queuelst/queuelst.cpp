@@ -36,6 +36,7 @@ void QueueLst::Pop() noexcept {
 	}
 	else {
 		tail_ = nullptr;
+		head_ = nullptr;
 	}
 	size_ -= 1;
 }

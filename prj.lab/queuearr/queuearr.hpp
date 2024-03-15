@@ -23,8 +23,6 @@ public:
 
 	Complex& Top();
 
-	const Complex& Top() const;
-
 	void Clear() noexcept;
 
 private:
@@ -32,6 +30,7 @@ private:
 	std::ptrdiff_t head_ = -1;
 	Complex* data_ = nullptr;
 	std::ptrdiff_t tail_ = -1;
+	std::ptrdiff_t capacity_ = 0;
 };
 
 #endif
