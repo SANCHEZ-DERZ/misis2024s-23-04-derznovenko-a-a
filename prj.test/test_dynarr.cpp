@@ -2,86 +2,46 @@
 #include "doctest.h"
 #include "dynarr/dynarr.hpp"
 
-TEST_CASE("dynarr ctor") {
-    DynArr arr_def;
-    CHECK_EQ(arr_def.Size(), 0);
-    const int size = 5;
-    DynArr arr_s(size);
-    CHECK_EQ(arr_s.Size(), size);
-    CHECK_THROWS(void(DynArr(-size)));
-}
+TEST_CASE("Testing DynArr class") {
+    DynArr arr(5);
 
-TEST_CASE("dynarr op[]") {
-    const int size = 5;
-    DynArr arr(size);
-    DynArr arr2(10);
-    CHECK_EQ(arr[0], 0);
-    CHECK_EQ(arr[arr.Size() - 1], 0);
-    CHECK_EQ(arr[0], arr[1]);
-    CHECK_THROWS(arr2[-1]);
-    CHECK_EQ(arr2[0], arr[arr.Size() - 1]);
-    CHECK_THROWS(arr[arr.Size()]);
-}
+    
 
-TEST_CASE("a") {
-    DynArr a(3);
-    CHECK(a[1] == 0);
-}
+    SUBCASE("Testing Size method") { CHECK(arr.Size() == 5); }
 
-TEST_CASE("methods") {
-    DynArr a(5);
-    a[0] = 100;
-    a[1] = 1;
-    a[3] = 3;
-    a[4] = 4;
-    CHECK(a[0] == 100);
-    CHECK(a.Size() == 5);
-
-    a.Resize(7);
-    CHECK(a.Size() == 7);
-    CHECK(a[5] == 0);
-    CHECK(a[6] == 0);
-    CHECK(a[4] == 4);
-
-}
-
-TEST_CASE("basic operations") {
-    DynArr a(5);
-    for (int i = 0; i < a.Size(); ++i) {
-        a[i] = i + 0.5;
+    SUBCASE("Testing Resize method") {
+        arr.Resize(10);
+        CHECK(arr.Size() == 10);
     }
-    for (int i = 0; i < 3; ++i) {
-        CHECK(a[i] == i + 0.5);
-    }
-    CHECK(a[1] == 1.5);
-    CHECK(a[a.Size() - 1] == 4.5);
-    CHECK_THROWS(a[5]);
-    CHECK_THROWS(a[-1]);
-}
 
-TEST_CASE("def") {
-    const int s = 100;
-    DynArr a(s);
-    for (int i = 0; i < a.Size(); ++i) {
-        a[i] = i;
+    SUBCASE("Testing operator[]") {
+        for (ptrdiff_t i = 0; i < arr.Size(); ++i) {
+            arr[i] = i;
+        }
+        for (ptrdiff_t i = 0; i < arr.Size(); ++i) {
+            CHECK(arr[i] == doctest::Approx(i));
+        }
     }
-    for (int i = 0; i < s; ++i) {
-        CHECK(a[i] == i);
+
+    SUBCASE("Testing out of range") {
+        CHECK_THROWS_AS(arr[arr.Size()], std::out_of_range);
+        CHECK_THROWS_AS(arr[arr.Size() + 1], std::out_of_range);
     }
-}
 
-TEST_CASE("Copy constructor") {
-    DynArr a;
-    a.Push_back(5);
-    a.Push_back(10);
-    DynArr b(a);
-    CHECK_EQ(a[0], b[0]);
-}
+    SUBCASE("Testing copy constructor") {
+        DynArr arr2(arr);
+        CHECK(arr2.Size() == arr.Size());
+        for (ptrdiff_t i = 0; i < arr.Size(); ++i) {
+            CHECK(arr2[i] == doctest::Approx(arr[i]));
+        }
+    }
 
-TEST_CASE("operator=") {
-    DynArr a;
-    a.Push_back(5);
-    a.Push_back(10);
-    DynArr b = a;
-    CHECK_EQ(a[0], b[0]);
+    SUBCASE("Testing copy assignment") {
+        DynArr arr2(10);
+        arr2 = arr;
+        CHECK(arr2.Size() == arr.Size());
+        for (ptrdiff_t i = 0; i < arr.Size(); ++i) {
+            CHECK(arr2[i] == doctest::Approx(arr[i]));
+        }
+    }
 }

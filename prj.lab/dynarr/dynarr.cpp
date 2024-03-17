@@ -86,6 +86,14 @@ float& DynArr::operator[](std::ptrdiff_t idx) {
 	return data_[idx];
 }
 
+const float& DynArr::operator[](const ptrdiff_t idx) const {
+	if (idx < 0)
+		throw std::invalid_argument("Index shouldn't be a negative number");
+	else if (idx >= size_)
+		throw std::out_of_range("Index out of range");
+	return *(data_ + idx);
+}
+
 void DynArr::Push_back(float val) noexcept {
 	DynArr::Resize(size_ + 1);
 	data_[size_ - 1] = val;

@@ -3,6 +3,7 @@
 #define DYNARR_DYNARR_HPP_20231203
 
 #include <cstddef>
+#include <memory>
 
 class DynArr {
 
@@ -19,6 +20,8 @@ public:
 	DynArr& operator=(const DynArr&);
 
 	float& operator[](const std::ptrdiff_t idx);
+
+	const float& operator[](const std::ptrdiff_t idx) const;
 
 	std::ptrdiff_t Size() const noexcept {
 		return size_;
