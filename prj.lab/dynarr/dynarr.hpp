@@ -17,7 +17,9 @@ public:
 	~DynArr();
 	DynArr(const DynArr&);
 	DynArr(const std::ptrdiff_t size);
+	DynArr(DynArr&&) noexcept;
 	DynArr& operator=(const DynArr&);
+	DynArr& operator=(DynArr&&) noexcept;
 
 	float& operator[](const std::ptrdiff_t idx);
 

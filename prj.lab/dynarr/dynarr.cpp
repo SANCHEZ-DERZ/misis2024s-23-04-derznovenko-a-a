@@ -99,4 +99,26 @@ void DynArr::Push_back(float val) noexcept {
 	data_[size_ - 1] = val;
 }
 
+DynArr::DynArr(DynArr&& rhs) noexcept {
+	std::swap(data_, rhs.data_);
+	std::swap(size_, rhs.size_);
+	std::swap(capacity_, rhs.capacity_);
+	rhs.size_ = 0;
+	rhs.data_ = nullptr;
+	rhs.capacity_ = 0;
+}
+
+DynArr& DynArr::operator=(DynArr&& rhs) noexcept {
+	if (this != &rhs) {
+		std::swap(data_, rhs.data_);
+		std::swap(size_, rhs.size_);
+		std::swap(capacity_, rhs.capacity_);
+		rhs.size_ = 0;
+		rhs.data_ = nullptr;
+		rhs.capacity_ = 0;
+	}
+	return *this;
+}
+
+
 
