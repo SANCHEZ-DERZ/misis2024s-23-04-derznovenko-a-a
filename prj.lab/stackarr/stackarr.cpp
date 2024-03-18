@@ -46,9 +46,12 @@ StackArr& StackArr::operator=(const StackArr& arr) {
 
 
 StackArr& StackArr::operator=(StackArr&& rhs) noexcept {
-	std::swap(i_top_, rhs.i_top_);
-	std::swap(size_, rhs.size_);
-	std::swap(data_, rhs.data_);
+	if (this != &rhs) {
+		std::swap(i_top_, rhs.i_top_);
+		std::swap(size_, rhs.size_);
+		std::swap(data_, rhs.data_);
+	}
+	return *this;
 }
 
 

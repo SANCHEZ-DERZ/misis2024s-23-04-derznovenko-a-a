@@ -1,5 +1,6 @@
 #include "dynarr/dynarr.hpp"
-#include <iostream>
+#include <algorithm>
+#include <stdexcept>
 
 DynArr::DynArr() {
 	size_ = 0;
@@ -9,74 +10,55 @@ DynArr::DynArr() {
 
 
 DynArr& DynArr::operator=(const DynArr& arr) {
-	size_ = arr.size_;
-	capacity_ = size_ * 2;
-	delete[] data_;
-	data_ = new float[capacity_] {};
-	for (int i = 0; i < size_; i++) {
-		data_[i] = arr.data_[i];
+	if (this != &arr) {
+		size_ = arr.size_;
+		capacity_ = arr.capacity_;
+		std::copy(arr.data_, arr.data_ + arr.size_, data_);
 	}
 	return *this;
 }
 
 
 DynArr::DynArr(std::ptrdiff_t size) {
-	if (size < 0) {
-		throw std::overflow_error("Error: size cannot be less than zero");
+	if (size <= 0) {
+		throw std::invalid_argument("Error: size cannot be less than zero");
 	}
 	else {
 		size_ = size;
-		capacity_ = size_;
-		if (size != 0) {
-			data_ = new float[size] {};
-		}
-		else {
-			data_ = nullptr;
-			size_ = 0;
-			capacity_ = 0;
-		}
+		capacity_ = size_ * 2;
+		data_ = new float[size_] {};
 	}
 }
 
 DynArr::DynArr(const DynArr& rhs) {
 	size_ = rhs.size_;
-	capacity_ = size_;
+	capacity_ = rhs.size_;
 	data_ = nullptr;
-	if (size_ != 0) {
-		data_ = new float[size_];
-	}
-	else {
-		data_ = 0;
-	}
-	for (int i = 0; i < size_; i++) {
-		data_[i] = rhs.data_[i];
-	}
+	data_ = new float[rhs.size_];
+	std::copy(rhs.data_, rhs.data_ + size_, data_);
 }
 
 DynArr::~DynArr() {
 	if (data_) {
 		delete[] data_;
+		data_ = nullptr;
 	}
 }
 
 void DynArr::Resize(const std::ptrdiff_t size) {
-	if (capacity_ < size) {
-		std::ptrdiff_t new_capacity = 0;
-		if (size > size_ * 2) {
-			new_capacity = size;
-		}
-		else {
-			new_capacity = size_ * 2;
-		}
-		float* new_data = new float[new_capacity] {};
-		for (int i = 0; i < size_; i++) {
-			new_data[i] = data_[i];
-		}
-		delete[] data_;
-		data_ = new_data;
-		capacity_ = new_capacity;
+	if (size <= 0) {
+		throw std::invalid_argument("Size should be positive number");
 	}
-	size_ = size;
+	if (size < size_) {
+		size_ = size;
+	}
+	else {
+		float* buf = new float[size];
+		std::copy(data_, data_ + size_, buf);
+		std::swap(data_, buf);
+		capacity_ = size;
+		size_ = capacity_;
+	}
 }
 
 float& DynArr::operator[](std::ptrdiff_t idx) {
@@ -87,11 +69,10 @@ float& DynArr::operator[](std::ptrdiff_t idx) {
 }
 
 const float& DynArr::operator[](const ptrdiff_t idx) const {
-	if (idx < 0)
-		throw std::invalid_argument("Index shouldn't be a negative number");
-	else if (idx >= size_)
-		throw std::out_of_range("Index out of range");
-	return *(data_ + idx);
+	if (idx >= size_ || 0 > idx) {
+		throw std::out_of_range("index out of range");
+	}
+	return data_[idx];
 }
 
 void DynArr::Push_back(float val) noexcept {
