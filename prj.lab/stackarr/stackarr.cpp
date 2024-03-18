@@ -17,6 +17,13 @@ StackArr::StackArr(const StackArr& arr) {
 }
 
 
+StackArr::StackArr(StackArr&& rhs) noexcept {
+	std::swap(i_top_, rhs.i_top_);
+	std::swap(size_, rhs.size_);
+	std::swap(data_, rhs.data_);
+}
+
+
 StackArr::~StackArr() {
 	if (data_) {
 		delete[] data_;
@@ -35,6 +42,13 @@ StackArr& StackArr::operator=(const StackArr& arr) {
 		}
 	}
 	return *this;
+}
+
+
+StackArr& StackArr::operator=(StackArr&& rhs) noexcept {
+	std::swap(i_top_, rhs.i_top_);
+	std::swap(size_, rhs.size_);
+	std::swap(data_, rhs.data_);
 }
 
 

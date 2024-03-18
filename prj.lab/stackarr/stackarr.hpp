@@ -11,9 +11,13 @@ public:
 
 	StackArr(const StackArr&); 
 
+	StackArr(StackArr&&) noexcept;
+
 	~StackArr();
 
 	StackArr& operator=(const StackArr&);
+
+	StackArr& operator=(StackArr&&) noexcept;
 
 	bool IsEmpty() const noexcept;
 
