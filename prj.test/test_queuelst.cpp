@@ -26,8 +26,12 @@ TEST_CASE("Push") {
 TEST_CASE("Pop") {
 	QueueLst st;
 	Complex a{ 1.5, 2.0 };
+	Complex b{ 1.0, 1.0 };
 	st.Push(a);
+	st.Push(b);
 	CHECK_EQ(st.IsEmpty(), 0);
+	st.Pop();
+	CHECK_EQ(st.Top(), b);
 	st.Pop();
 	CHECK_EQ(st.IsEmpty(), 1);
 }

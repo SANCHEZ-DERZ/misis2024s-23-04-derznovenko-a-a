@@ -4,8 +4,6 @@
 
 #include <cstddef>
 #include "complex/complex.hpp"
-#include <vector>
-#include <algorithm>
 
 class QueueLst {
 public:
@@ -39,4 +37,4 @@ private:
 	Node* tail_ = nullptr;
 };
 
-#endif // !STACKARR_STACKARR_HPP_20240203
+#endif

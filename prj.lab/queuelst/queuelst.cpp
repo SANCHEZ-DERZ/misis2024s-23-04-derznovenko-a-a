@@ -1,5 +1,5 @@
 #include "queuelst/queuelst.hpp"
-
+#include <stdexcept>
 
 QueueLst::QueueLst() {
 	size_ = 0;
@@ -40,21 +40,25 @@ const Complex& QueueLst::Top() const {
 
 void QueueLst::Pop() noexcept {
 	if (head_ != nullptr) {
-		Node* new_head = head_;
-		head_ = head_->next;
-		delete new_head;
+		if (head_ != tail_) {
+			Node* new_head = head_;
+			head_ = head_->next;
+			delete new_head;
+			size_ -= 1;
+		}
+		else {
+			delete head_;
+			tail_ = nullptr;
+			head_ = nullptr;
+			size_ -= 1;
+		}
 	}
-	else {
-		tail_ = nullptr;
-		head_ = nullptr;
-	}
-	size_ -= 1;
 }
 
 
 void QueueLst::Clear() noexcept {
-	while (head_ != nullptr) {
-		this->Pop();
+	while (!IsEmpty()) {
+		Pop();
 	}
 	size_ = 0;
 }
@@ -69,12 +73,11 @@ void QueueLst::Push(const Complex& val) {
 		tail_->next = new Node{ val };
 		tail_ = tail_->next;
 	}
-	size_ += 1;
 }
 
 
 QueueLst::~QueueLst() {
-	this->Clear();
+	Clear();
 }
 
 
