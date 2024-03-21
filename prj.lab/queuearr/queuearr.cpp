@@ -8,11 +8,13 @@ QueueArr::QueueArr() {
 	tail_ = -1;
 	size_ = 0;
 	data_ = nullptr;
+	capacity_ = 0;
 }
 
 
 QueueArr::~QueueArr() {
 	delete[] data_;
+	data_ = nullptr;
 }
 
 
@@ -20,6 +22,7 @@ void QueueArr::Clear() noexcept {
 	size_ = 0;
 	head_ = -1;
 	tail_ = -1;
+	capacity_ = 0;
 }
 
 
@@ -40,14 +43,16 @@ Complex& QueueArr::Top() {
 
 void QueueArr::Push(const Complex& val) {
 	if (data_ != nullptr) {
-		if (size_ > tail_ + 1) {
-			data_[tail_ + 1] = val;
+		if (capacity_ > size_) {
+			size_ += 1;
 			tail_ += 1;
+			data_[tail_] = val;
 		}
 		else {
 			tail_ += 1;
-			size_ = tail_ * 2;
-			Complex* new_data = new Complex[size_];
+			size_ += 1;
+			capacity_ = size_ * 2;
+			Complex* new_data = new Complex[capacity_];
 			for (int i = 0; i < size_; i++) {
 				new_data[i] = data_[i];
 			}
@@ -57,10 +62,11 @@ void QueueArr::Push(const Complex& val) {
 		}
 	}
 	else {
-		size_ += 1;
-		tail_ += 1;
+		size_ = 1;
+		capacity_ = size_ * 2;
+		tail_ = 0;
 		head_ = 0;
-		data_ = new Complex[size_];
+		data_ = new Complex[capacity_];
 		data_[tail_] = val;
 	}
 }
@@ -75,6 +81,7 @@ void QueueArr::Pop() noexcept {
 			head_ = -1;
 			tail_ = -1;
 		}
+		size_ -= 1;
 	}
 }
 
@@ -83,21 +90,25 @@ QueueArr::QueueArr(const QueueArr& que) {
 	size_ = que.size_;
 	tail_ = que.tail_;
 	head_ = que.head_;
-	data_ = new Complex[size_];
-	std::copy(que.data_, que.data_ + que.size_, data_);
+	capacity_ = que.capacity_;
+	data_ = new Complex[capacity_];
+	std::copy(que.data_, que.data_ + que.capacity_, data_);
 }
 
 
-QueueArr& QueueArr::operator=(const QueueArr& que) {
-	if (this != &que) {
-		Complex* new_data = new Complex[que.size_];
-		for (int i = 0; i < que.size_; i++) {
-			new_data[i] = data_[i];
-		}
-		data_ = new_data;
+QueueArr& QueueArr::operator=(const QueueArr& rhs) {
+	if (this != &rhs) {
 		delete[] data_;
-		head_ = que.head_;
-		tail_ = que.tail_;
+		size_ = rhs.size_;
+		capacity_ = rhs.capacity_;
+		head_ = rhs.head_;
+		tail_ = rhs.tail_;
+		data_ = new Complex[capacity_];
+		for (std::size_t i = 0; i < size_; ++i) {
+			data_[i] = rhs.data_[i + head_];
+		}
+		tail_ = tail_ - head_;
+		head_ = 0;
 	}
 	return *this;
 }
