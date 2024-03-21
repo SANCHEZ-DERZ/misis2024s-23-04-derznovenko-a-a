@@ -73,6 +73,7 @@ void QueueLst::Push(const Complex& val) {
 		tail_->next = new Node{ val };
 		tail_ = tail_->next;
 	}
+	size_ += 1;
 }
 
 
