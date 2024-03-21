@@ -2,46 +2,94 @@
 #include "doctest.h"
 #include "dynarr/dynarr.hpp"
 
-TEST_CASE("Testing DynArr class") {
-    DynArr arr(5);
-
-    
-
-    SUBCASE("Testing Size method") { CHECK(arr.Size() == 5); }
-
-    SUBCASE("Testing Resize method") {
-        arr.Resize(10);
-        CHECK(arr.Size() == 10);
+TEST_CASE("cons") {
+    SUBCASE("default") {
+        DynArr a;
+        CHECK(a.Size() == 0);
     }
+    SUBCASE("int") {
+        DynArr a(5);
+        CHECK(a.Size() == 5);
+        for (int i = 0; i < 5; ++i)
+            CHECK(a[i] == 0);
 
-    SUBCASE("Testing operator[]") {
-        for (ptrdiff_t i = 0; i < arr.Size(); ++i) {
-            arr[i] = i;
+        DynArr b(500);
+        CHECK(b.Size() == 500);
+        for (int i = 0; i < 500; ++i)
+            CHECK(b[i] == 0);
+    }
+    SUBCASE("copy") {
+        DynArr a(500);
+        for (int i = 0; i < 500; ++i)
+            a[i] = i;
+
+        DynArr b(a);
+        CHECK(b.Size() == 500);
+        for (int i = 0; i < 500; ++i)
+            CHECK(b[i] == i);
+
+        b[0] = 6;
+        CHECK(b[0] == 6);
+        CHECK(a[0] == 0);
+    }
+}
+
+TEST_CASE("appr") {
+    SUBCASE("appr with empty") {
+        DynArr a;
+        DynArr b(5);
+        for (int i = 0; i < 5; ++i) {
+            b[i] = i;
         }
-        for (ptrdiff_t i = 0; i < arr.Size(); ++i) {
-            CHECK(arr[i] == doctest::Approx(i));
+        a = b;
+        CHECK(a.Size() == 5);
+        for (int i = 0; i < 5; ++i) {
+            CHECK(a[i] == i);
         }
     }
-
-    SUBCASE("Testing out of range") {
-        CHECK_THROWS_AS(arr[arr.Size()], std::out_of_range);
-        CHECK_THROWS_AS(arr[arr.Size() + 1], std::out_of_range);
+    SUBCASE("appr with full") {
+        DynArr a(5);
+        DynArr b(5);
+        for (int i = 0; i < 5; ++i)
+            b[i] = i;
+        a = b;
+        CHECK(a.Size() == 5);
+        for (int i = 0; i < 5; ++i)
+            CHECK(a[i] == i);
     }
+}
 
-    SUBCASE("Testing copy constructor") {
-        DynArr arr2(arr);
-        CHECK(arr2.Size() == arr.Size());
-        for (ptrdiff_t i = 0; i < arr.Size(); ++i) {
-            CHECK(arr2[i] == doctest::Approx(arr[i]));
-        }
+TEST_CASE("resize") {
+    SUBCASE("resize empty")
+    {
+        DynArr a;
+        a.Resize(10);
+        CHECK(a.Size() == 10);
+        for (int i = 0; i < 10; ++i)
+            CHECK(a[i] == 0);
     }
-
-    SUBCASE("Testing copy assignment") {
-        DynArr arr2(10);
-        arr2 = arr;
-        CHECK(arr2.Size() == arr.Size());
-        for (ptrdiff_t i = 0; i < arr.Size(); ++i) {
-            CHECK(arr2[i] == doctest::Approx(arr[i]));
-        }
+    SUBCASE("resize full >") {
+        DynArr a(5);
+        CHECK(a.Size() == 5);
+        for (int i = 0; i < 5; ++i)
+            CHECK(a[i] == 0);
+        a.Resize(10);
+        CHECK(a.Size() == 10);
+        for (int i = 0; i < 10; ++i)
+            CHECK(a[i] == 0);
+    }
+    SUBCASE("resize full <") {
+        DynArr a(5);
+        CHECK(a.Size() == 5);
+        for (int i = 0; i < 5; ++i)
+            CHECK(a[i] == 0);
+        a.Resize(3);
+        CHECK(a.Size() == 3);
+        for (int i = 0; i < 3; ++i)
+            CHECK(a[i] == 0);
+    }
+    SUBCASE("check error") {
+        DynArr a;
+        CHECK_THROWS(a.Resize(-1));
     }
 }

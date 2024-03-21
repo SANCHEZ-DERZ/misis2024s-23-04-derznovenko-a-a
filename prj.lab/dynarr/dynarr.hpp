@@ -3,7 +3,6 @@
 #define DYNARR_DYNARR_HPP_20231203
 
 #include <cstddef>
-#include <memory>
 
 class DynArr {
 
@@ -30,8 +29,6 @@ public:
 	}
 
 	void Resize(const std::ptrdiff_t size);
-
-	void Push_back(float val) noexcept;
 };
 
 #endif
