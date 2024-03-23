@@ -90,3 +90,4 @@ TEST_CASE("Operator=") {
 	cpy = st;
 	CHECK_EQ(cpy.Top(), st.Top());
 }
+
