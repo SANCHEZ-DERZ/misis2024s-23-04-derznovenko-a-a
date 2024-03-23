@@ -10,9 +10,13 @@ public:
 
 	QueueLstPr(const QueueLstPr&);
 
+	QueueLstPr(QueueLstPr&& rhs) noexcept;
+
 	~QueueLstPr();
 
 	QueueLstPr& operator=(const QueueLstPr&);
+
+	QueueLstPr& operator=(QueueLstPr&&) noexcept;
 
 	bool IsEmpty() const noexcept;
 

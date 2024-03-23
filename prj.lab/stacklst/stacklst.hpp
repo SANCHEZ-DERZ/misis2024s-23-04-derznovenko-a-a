@@ -11,9 +11,13 @@ public:
 
 	StackLst(const StackLst& lst);
 
+	StackLst(StackLst&&) noexcept;
+
 	~StackLst();
 
 	StackLst& operator=(const StackLst& lst);
+
+	StackLst& operator=(StackLst&&) noexcept;
 
 	bool IsEmpty() const noexcept;
 
@@ -36,4 +40,4 @@ private:
 	std::ptrdiff_t size_ = 0;
 };
 
-#endif // !STACKARR_STACKARR_HPP_20240203
+#endif

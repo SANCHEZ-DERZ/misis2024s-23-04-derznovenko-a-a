@@ -115,3 +115,22 @@ QueueLstPr& QueueLstPr::operator=(const QueueLstPr& que) {
 	}
 	return *this;
 }
+
+
+QueueLstPr::QueueLstPr(QueueLstPr&& rhs) noexcept {
+	head_ = rhs.head_;
+	tail_ = rhs.tail_;
+	rhs.head_ = nullptr;
+	rhs.tail_ = nullptr;
+}
+
+
+QueueLstPr& QueueLstPr::operator=(QueueLstPr&& rhs) noexcept {
+	if (this != &rhs) {
+		head_ = rhs.head_;
+		tail_ = rhs.tail_;
+		rhs.head_ = nullptr;
+		rhs.tail_ = nullptr;
+	}
+	return *this;
+}

@@ -102,3 +102,18 @@ StackLst::StackLst(const StackLst& lst) {
 		new_head = head_->next;
 	}
 }
+
+
+StackLst::StackLst(StackLst&& rhs) noexcept {
+	head_ = rhs.head_;
+	rhs.head_ = nullptr;
+}
+
+
+StackLst& StackLst::operator=(StackLst&& rhs) noexcept {
+	if (this != &rhs) {
+		head_ = rhs.head_;
+		rhs.head_ = nullptr;
+	}
+	return *this;
+}

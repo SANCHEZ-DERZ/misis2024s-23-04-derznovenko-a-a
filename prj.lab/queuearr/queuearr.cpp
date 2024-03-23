@@ -112,3 +112,34 @@ QueueArr& QueueArr::operator=(const QueueArr& rhs) {
 	}
 	return *this;
 }
+
+
+QueueArr::QueueArr(QueueArr&& rhs) noexcept {
+	std::swap(head_, rhs.head_);
+	std::swap(tail_, rhs.tail_);
+	std::swap(data_, rhs.data_);
+	std::swap(size_, rhs.size_);
+	std::swap(capacity_, rhs.capacity_);
+	rhs.head_ = 0;
+	rhs.tail_ = 0;
+	rhs.data_ = nullptr;
+	rhs.size_ = 0;
+	rhs.capacity_ = 0;
+}
+
+
+QueueArr& QueueArr::operator=(QueueArr&& rhs) noexcept {
+	if (this != &rhs) {
+		std::swap(head_, rhs.head_);
+		std::swap(tail_, rhs.tail_);
+		std::swap(data_, rhs.data_);
+		std::swap(size_, rhs.size_);
+		std::swap(capacity_, rhs.capacity_);
+		rhs.head_ = 0;
+		rhs.tail_ = 0;
+		rhs.data_ = nullptr;
+		rhs.size_ = 0;
+		rhs.capacity_ = 0;
+	}
+	return *this;
+}

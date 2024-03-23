@@ -102,3 +102,22 @@ QueueLst& QueueLst::operator=(const QueueLst& que) {
 	}
 	return *this;
 }
+
+
+QueueLst::QueueLst(QueueLst&& rhs) noexcept {
+	head_ = rhs.head_;
+	tail_ = rhs.tail_;
+	rhs.head_ = nullptr;
+	rhs.tail_ = nullptr;
+}
+
+
+QueueLst& QueueLst::operator=(QueueLst&& rhs) noexcept {
+	if (this != &rhs) {
+		head_ = rhs.head_;
+		tail_ = rhs.tail_;
+		rhs.head_ = nullptr;
+		rhs.tail_ = nullptr;
+	}
+	return *this;
+}

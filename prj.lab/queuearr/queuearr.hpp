@@ -11,9 +11,13 @@ public:
 
 	QueueArr(const QueueArr&);
 
+	QueueArr( QueueArr&&) noexcept;
+
 	~QueueArr();
 
 	QueueArr& operator=(const QueueArr&);
+
+	QueueArr& operator=(QueueArr&&) noexcept;
 
 	bool IsEmpty() const noexcept;
 
