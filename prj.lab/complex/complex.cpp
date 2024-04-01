@@ -1,206 +1,151 @@
-#include <complex/complex.hpp>
 
-double Complex::getRe() const{
-	return re;
-}
+#include "complex.hpp"
 
-double Complex::getIm() const{
-	return im;
-}
+Complex::Complex() : re(0.0), im(0.0) {}
 
-Complex& Complex::operator-() {
-	re *= -1;
-	im *= -1;
-	return *this;
-}
+Complex::Complex(const Complex& other) : re(other.re), im(other.im) {}
 
-Complex& Complex::operator=(const Complex& num) {
-	re = num.re;
-	im = num.im;
-	return* this;
-}
-
-Complex& Complex::operator=(const double& num) {
-	return operator=(Complex(num));
-}
-
-Complex& Complex::operator*=(const double& num) {
-	return operator=(Complex(num));
-}
-
-Complex& Complex::operator+=(const double& num) {
-	return operator+=(Complex(num));
-}
-
-Complex& Complex::operator-=(const double& num) {
-	return operator-=(Complex(num));
-}
-
-Complex& Complex::operator/=(const double& num) {
-	return operator/=(Complex(num));
-}
-
-Complex& Complex::operator+=(const Complex& num) {
-	re += num.re;
-	im += num.im;
-	return *this;
-}
-
-Complex& Complex::operator-=(const Complex& num) {
-	re -= num.re;
-	im -= num.im;
-	return *this;
-}
-
-Complex& Complex::operator*=(const Complex& num) {
-	double k, e;
-	k = re;
-	e = im;
-	re *= num.re;
-	im *= num.im;
-	re -= im;
-	im = k * num.im + e * num.re;
-	return *this;
-}
-
-Complex& Complex::operator/=(const Complex& rhs)
-{
-	double k;
-	k = re;
-	if ((rhs.im * rhs.im + rhs.re * rhs.re) != 0) {
-		re = (re * rhs.re + im * rhs.im) / (rhs.im * rhs.im + rhs.re * rhs.re);
-		im = (im * rhs.re - k * rhs.im) / (rhs.im * rhs.im + rhs.re * rhs.re);
-		return *this;
-	}
-	throw std::overflow_error("Error: Division by zero");
-}
-
-Complex operator+(const Complex& num, const Complex& num2) {
-	Complex sum(num);
-	sum += num2;
-	return sum;
-}
-
-Complex operator+(const Complex& num, const double& num2) {
-	Complex sum(num);
-	sum.re += num2;
-	return sum;
-}
-
-Complex operator+(const double& num, const Complex& num2) {
-	Complex sum(num2);
-	sum.re += num;
-	return sum;
-}
-
-Complex operator-(const Complex& num, const Complex& num2) {
-	Complex minus(num);
-	minus -= num2;
-	return minus;
-}
-
-Complex operator-(const Complex& num, const double& num2) {
-	Complex minus(num);
-	minus -= num2;
-	return minus;
-}
-
-Complex operator-(const double& num, const Complex& num2) {
-	Complex minus(num2);
-	minus.re -= num;
-	minus.re *= -1;
-	minus.im *= -1;
-	return minus;
-}
-
-Complex operator*(const Complex& num, const Complex& num2) {
-	Complex umn(num);
-	umn *= num2;
-	return umn;
-}
-
-Complex operator*(const Complex& num, const double& num2) {
-	Complex umn(num);
-	umn *= num2;
-	return umn;
-}
-
-Complex operator*(const double& num, const Complex& num2) {
-	Complex umn(num2);
-	umn.re *= num;
-	umn.im *= num;
-	return umn;
-}
-
-Complex operator/(const Complex& num, const Complex& num2)
-{
-	Complex raz(num);
-	raz /= num2;
-	return raz;
-}
-
-Complex operator/(const Complex& num, const double& num2)
-{
-	Complex raz(num);
-	raz /= num2;
-	return raz;
-}
-
-Complex operator/(const double& num, const Complex& num2)
-{
-	Complex raz(num);
-	raz /= num2;
-	return raz;
-}
-
-bool operator==(const Complex& num, const double& num2)
-{
-	if (num.im == 0 && std::abs(num.re - num2) < 4 * std::numeric_limits<double>::epsilon()) {
-		return true;
-	}
-	return false;
-}
-
-bool operator==(const double& num, const Complex& num2)
-{
-	if (num2.im == 0 && std::abs(num2.re - num) < 4 * std::numeric_limits<double>::epsilon()) {
-		return true;
-	}
-	return false;
-}
-
-bool operator!=(const Complex& num, const double& num2)
-{
-	return !(num == num2);
-}
-
-bool operator!=(const double& num, const Complex& num2)
-{
-	return !(num == num2);
-}
-
-std::ostream& operator<<(std::ostream& out, const Complex& num) {
-	out << "{" << num.getRe() << ", " << num.getIm() << "}";
-	return out;
-}
-
-std::istream& operator>>(std::istream& in, Complex& num) {
-	double r = 0.0;
-	double i = 0.0;
-	char sep{};
-	in >> r >> sep;
-	in >> i >> sep;
-	num = Complex(r, i);
-	return in;
-}
-
-Complex::Complex(const double real)
-	: Complex(real, 0.0)
-{
-}
+Complex::Complex(const double real) : re(real), im(0.0) {}
 
 Complex::Complex(const double real, const double imaginary)
-	: re(real)
-	, im(imaginary)
-{
+    : re(real), im(imaginary) {}
+Complex& Complex::operator=(const Complex& other) {
+    re = other.re;
+    im = other.im;
+    return *this;
+}
+
+Complex Complex::operator-() const { return Complex(-re, -im); }
+
+Complex Complex::operator+(const Complex& other) {
+    return Complex(re + other.re, im + other.im);
+}
+
+Complex Complex::operator-(const Complex& other) {
+    return Complex(re - other.re, im - other.im);
+}
+
+Complex Complex::operator*(const Complex& other) {
+    return Complex(re * other.re - im * other.im, re * other.im + im * other.re);
+}
+
+Complex Complex::operator/(const Complex& other) {
+    double denominator = other.re * other.re + other.im * other.im;
+    return Complex((re * other.re + im * other.im) / denominator,
+        (im * other.re - re * other.im) / denominator);
+}
+
+Complex& Complex::operator+=(const Complex& other) {
+    re += other.re;
+    im += other.im;
+    return *this;
+}
+
+Complex& Complex::operator+=(const double rhs) {
+    re += rhs;
+    return *this;
+}
+
+Complex& Complex::operator-=(const Complex& other) {
+    re -= other.re;
+    im -= other.im;
+    return *this;
+}
+
+Complex& Complex::operator-=(const double rhs) {
+    re -= rhs;
+    return *this;
+}
+
+Complex& Complex::operator*=(const Complex& other) {
+    double temp_re = re * other.re - im * other.im;
+    im = re * other.im + im * other.re;
+    re = temp_re;
+    return *this;
+}
+
+Complex& Complex::operator*=(const double rhs) {
+    re *= rhs;
+    im *= rhs;
+    return *this;
+}
+
+Complex& Complex::operator/=(const Complex& other) {
+    double denominator = other.re * other.re + other.im * other.im;
+    double temp_re = (re * other.re + im * other.im) / denominator;
+    im = (im * other.re - re * other.im) / denominator;
+    re = temp_re;
+    return *this;
+}
+
+Complex& Complex::operator/=(const double rhs) {
+    re /= rhs;
+    im /= rhs;
+    return *this;
+}
+
+bool Complex::operator==(const Complex& other) const {
+    return re == other.re && im == other.im;
+}
+
+bool Complex::operator!=(const Complex& other) const {
+    return !(*this == other);
+}
+
+std::ostream& Complex::writeTo(std::ostream& ostrm) const {
+    ostrm << leftBrace << re << separator << im << rightBrace;
+    return ostrm;
+}
+
+std::istream& Complex::readFrom(std::istream& istrm) {
+    char leftBrace(0);
+    double real(0.0);
+    char comma(0);
+    double imaginary(0.0);
+    char rightBrace(0);
+    istrm >> leftBrace >> real >> comma >> imaginary >> rightBrace;
+    if (istrm.good()) {
+        if ((Complex::leftBrace == leftBrace) && (Complex::separator == comma) &&
+            (Complex::rightBrace == rightBrace)) {
+            re = real;
+            im = imaginary;
+        }
+        else {
+            istrm.setstate(std::ios_base::failbit);
+        }
+    }
+    return istrm;
+}
+
+Complex operator+(double lhs, const Complex& rhs) {
+    return Complex(lhs + rhs.re, rhs.im);
+}
+
+Complex operator-(double lhs, const Complex& rhs) {
+    return Complex(lhs - rhs.re, -rhs.im);
+}
+
+Complex operator*(double lhs, const Complex& rhs) {
+    return Complex(lhs * rhs.re, lhs * rhs.im);
+}
+
+Complex operator/(double lhs, const Complex& rhs) {
+    double denominator = rhs.re * rhs.re + rhs.im * rhs.im;
+    return Complex((lhs * rhs.re) / denominator, (-lhs * rhs.im) / denominator);
+}
+
+Complex operator+(const Complex& lhs, double rhs) {
+    return Complex(lhs.re + rhs, lhs.im);
+}
+
+Complex operator-(const Complex& lhs, double rhs) {
+    return Complex(lhs.re - rhs, lhs.im);
+}
+
+Complex operator*(const Complex& lhs, double rhs) {
+    return Complex(lhs.re * rhs, lhs.im * rhs);
+}
+
+Complex operator/(const Complex& lhs, double rhs) {
+    return Complex(lhs.re / rhs, lhs.im / rhs);
 }
