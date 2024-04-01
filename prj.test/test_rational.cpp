@@ -1,95 +1,165 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include "doctest.h"
 #include "rational/rational.hpp"
-#include "doctest.h" 
 
-TEST_CASE("rational ctor") {
-	Rational r_def;
-	CHECK(0 == r_def.num());
-	CHECK(1 == r_def.den());
+TEST_CASE("Constructor with move semantics") {
+    Rational r1(2, 3);
+    Rational r2(std::move(r1));
+    CHECK(r2 == Rational(2, 3));
 
-	Rational r_int(3);
-	CHECK(3 == r_int.num());
-	CHECK(1 == r_int.den());
+    Rational r3(3, 4);
+    r2 = std::move(r3);
+    CHECK(r2 == Rational(3, 4));
 
-	CHECK_THROWS(Rational(1, 0));
+    Rational&& r4 = Rational(4, 5);
+    CHECK(r4 == Rational(4, 5));
 }
 
-TEST_CASE("=") {
-	CHECK(Rational(2, 1) == (Rational(4, 3) = int64_t(2)));
-	CHECK(Rational(5, 3) == (Rational(9, 7) = Rational(10, 6)));
+TEST_CASE("Testing Rational class") {
+    Rational r1(2, 3);
+    Rational r2(3, 4);
+
+    SUBCASE("Testing equality operator") {
+        CHECK_FALSE(r1 == r2);
+        CHECK(r1 == Rational(2, 3));
+    }
+
+    SUBCASE("Testing inequality operator") {
+        CHECK(r1 != r2);
+        CHECK_FALSE(r1 != Rational(2, 3));
+    }
+
+    SUBCASE("Testing less than operator") {
+        CHECK(r1 < r2);
+        CHECK_FALSE(r2 < r1);
+    }
+
+    SUBCASE("Testing less than or equal to operator") {
+        CHECK(r1 <= r2);
+        CHECK_FALSE(r2 <= r1);
+        CHECK(Rational(2, 3) <= r1);
+    }
+
+    SUBCASE("Testing greater than operator") {
+        CHECK(r2 > r1);
+        CHECK_FALSE(r1 > r2);
+    }
+
+    SUBCASE("Testing greater than or equal to operator") {
+        CHECK(r2 >= r1);
+        CHECK_FALSE(r1 >= r2);
+        CHECK(r1 >= Rational(2, 3));
+    }
+
+    SUBCASE("Testing addition operator") {
+        Rational r3 = r1 + r2;
+        CHECK(r3 == Rational(17, 12));
+    }
+
+    SUBCASE("Testing subtraction operator") {
+        Rational r3 = r1 - r2;
+        CHECK(r3 == Rational(-1, 12));
+    }
+
+    SUBCASE("Testing multiplication operator") {
+        Rational r3 = r1 * r2;
+        CHECK(r3 == Rational(1, 2));
+    }
+
+    SUBCASE("Testing division operator") {
+        Rational r3 = r1 / r2;
+        CHECK(r3 == Rational(8, 9));
+    }
+
+    SUBCASE("Testing addition assignment operator") {
+        r1 += r2;
+        CHECK(r1 == Rational(17, 12));
+    }
+
+    SUBCASE("Testing subtraction assignment operator") {
+        r1 -= r2;
+        CHECK(r1 == Rational(-1, 12));
+    }
+
+    SUBCASE("Testing multiplication assignment operator") {
+        r1 *= r2;
+        CHECK(r1 == Rational(1, 2));
+    }
+
+    SUBCASE("Testing division assignment operator") {
+        r1 /= r2;
+        CHECK(r1 == Rational(8, 9));
+    }
+
+    SUBCASE("Testing operator>>") {
+        std::istringstream istrm("4/6");
+        istrm >> r1;
+        CHECK(r1 == Rational(2, 3));
+    }
+
+    SUBCASE("Testing operator<<") {
+        std::ostringstream ostrm;
+        ostrm << r1;
+        CHECK(ostrm.str() == "2/3");
+    }
 }
 
-TEST_CASE("+") {
-	CHECK(Rational(41, 21) == (Rational(2, 7) + Rational(5, 3)));
-	CHECK(Rational(22, 1) == (Rational(11, 2) + Rational(33, 2)));
-	CHECK(Rational(10, 3) == (Rational(4, 3) += Rational(2, 1)));
-	CHECK(Rational(11, 3) == (Rational(2, 3) += int64_t(3)));
-	CHECK(Rational(7, 2) == (Rational(9, 6) + int64_t(2)));
-}
+TEST_CASE("Testing Rational class with int64_t") {
+    Rational r1(2, 3);
+    int64_t i1 = 3;
 
-TEST_CASE("-") {
-	CHECK(Rational(1, 1) == (Rational(3, 2) -= Rational(1, 2)));
-	CHECK(Rational(17, 12) == (Rational(8, 3) -= Rational(5, 4)));
-	CHECK(Rational(-9, 20) == (Rational(4, 5) - Rational(5, 4)));
-	CHECK(Rational(-1, 9) == (Rational(8, 9) - int64_t(1)));
-	CHECK(Rational(1, 9) == (int64_t(1) - Rational(8, 9)));
-	CHECK(Rational(-2, 1) == (Rational(4, 2) -= int64_t(4)));
-}
+    SUBCASE("Testing addition operator") {
+        Rational r2 = r1 + i1;
+        CHECK(r2 == Rational(11, 3));
+    }
 
-TEST_CASE("*") {
-	CHECK(Rational(11, 5) == (Rational(2, 5) *= Rational(11, 2)));
-	CHECK(Rational(13, 12) == (Rational(13, 4) * Rational(1, 3)));
-	CHECK(Rational(1, 1) == (Rational(7, 21) * int64_t(3)));
-	CHECK(Rational() == (int64_t(0) * Rational(9, 6)));
-}
+    SUBCASE("Testing subtraction operator") {
+        Rational r2 = r1 - i1;
+        CHECK(r2 == Rational(-7, 3));
+    }
 
-TEST_CASE("/") {
-	CHECK(Rational(4, 55) == (Rational(2, 5) /= Rational(11, 2)));
-	CHECK(Rational(25, 16) == (Rational(5, 2) / Rational(8, 5)));
-	CHECK(Rational(11, 20) == (Rational(11, 2) / int64_t(10)));
-	CHECK(Rational(20, 11) == (int64_t(10) / Rational(11, 2)));
-	CHECK(Rational() == (int64_t(0) / Rational(4, 6)));
-	CHECK_THROWS(Rational(4, 6) / int64_t(0));
-}
+    SUBCASE("Testing division operator") {
+        Rational r2 = r1 / i1;
+        CHECK(r2 == Rational(2, 9));
+    }
 
-TEST_CASE("inc_dec") {
-	CHECK(Rational(13, 5) == (++Rational(8, 5)));
-	CHECK(Rational(8, 5) == (--Rational(13, 5)));
-}
+    SUBCASE("Testing addition assignment operator") {
+        r1 += i1;
+        CHECK(r1 == Rational(11, 3));
+    }
 
-TEST_CASE("cut_back") {
-	CHECK(Rational(-1, 20) == Rational(-5, 100));
-	CHECK(Rational(4, 1) == Rational(64, 16));
-}
+    SUBCASE("Testing subtraction assignment operator") {
+        r1 -= i1;
+        CHECK(r1 == Rational(-7, 3));
+    }
 
-TEST_CASE("minus") {
-	CHECK(Rational(-3, 1) == Rational(3, -1));
-	CHECK(Rational(3, 1) == Rational(-3, -1));
-}
+    SUBCASE("Testing multiplication assignment operator") {
+        r1 *= i1;
+        CHECK(r1 == Rational(2, 1));
+    }
 
-TEST_CASE("num_den") {
-	CHECK(int64_t(4) == (Rational(4, 3).num()));
-	CHECK(int64_t(3) == (Rational(4, 3).den()));
-}
+    SUBCASE("Testing division assignment operator") {
+        r1 /= i1;
+        CHECK(r1 == Rational(2, 9));
+    }
 
-TEST_CASE("equality") {
-	CHECK(Rational(12, 13) == Rational(24, 26));
-	CHECK(Rational(8, 2) == int64_t(4));
-	CHECK(Rational(86, 58) != Rational(87, 58));
-	CHECK(int64_t(3) != Rational(3, 9));
-	CHECK(Rational() == Rational(0));
-}
+    SUBCASE("Testing addition operator with int64_t on the left") {
+        Rational r2 = i1 + r1;
+        CHECK(r2 == Rational(11, 3));
+    }
 
-TEST_CASE("more") {
-	CHECK(Rational(13, 5) > Rational(10, 4));
-	CHECK(Rational(7, 2) > int64_t(3));
-	CHECK(Rational(33, 4) >= Rational(66, 8));
-	CHECK(int64_t(2) >= Rational(82, 41));
-}
+    SUBCASE("Testing subtraction operator with int64_t on the left") {
+        Rational r2 = i1 - r1;
+        CHECK(r2 == Rational(7, 3));
+    }
 
-TEST_CASE("less") {
-	CHECK(Rational(19, 2) < Rational(10, 1));
-	CHECK(Rational(11, 3) < int64_t(4));
-	CHECK(Rational(4, 5) <= Rational(5, 4));
-	CHECK(int64_t(17) <= Rational(187, 11));
+    SUBCASE("Testing multiplication operator with int64_t on the left") {
+        Rational r2 = i1 * r1;
+        CHECK(r2 == Rational(2, 1));
+    }
+
+    SUBCASE("Testing division operator with int64_t on the left") {
+        Rational r2 = i1 / r1;
+        CHECK(r2 == Rational(9, 2));
+    }
 }

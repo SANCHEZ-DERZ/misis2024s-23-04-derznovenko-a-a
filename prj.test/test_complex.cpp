@@ -1,174 +1,202 @@
-#include <complex/complex.hpp>
-int main() {
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include "complex/complex.hpp"
+#include "doctest.h"
 
+TEST_CASE("Constructor") {
+    Complex c1;
 
-	Complex x, y;
-	double d;
+    Complex c2(1);
+    CHECK(c2.re == 1);
+    CHECK(c2.im == 0);
 
-	// сумма двух комплексных
-	x = Complex{ 1.5, 2.0 };
-	y = Complex{ 2.5, 3.5 };
-	std::cout << x << " + " << y << " == " << x + y << " Expected: {4.0, 5.5}\n";
-	std::cout << std::endl;
+    Complex c3(1, 2);
+    CHECK(c3.re == 1);
+    CHECK(c3.im == 2);
 
-	// разность двух комплексных
-	x = Complex{ 3.0, 5.0 };
-	y = Complex{ 1.5, 2.5 };
-	std::cout << x << " - " << y << " == " << x - y << " Expected: {1.5, 2.5}\n";
-	std::cout << std::endl;
+    Complex c4(c3);
+    CHECK(c4.re == 1);
+    CHECK(c4.im == 2);
 
-	// произведение двух комплексных
-	x = Complex{ 1.5, 2.0 };
-	y = Complex{ 2.0, 3.0 };
-	std::cout << x << " * " << y << " == " << x * y << " Expected: {-3,8.5}\n";
-	std::cout << std::endl;
+    Complex c5 = c3;
+    CHECK(c5.re == 1);
+    CHECK(c5.im == 2);
 
-	// частное двух комплексных
-	x = Complex{ 3.0, 5.0 };
-	y = Complex{ 1.5, 2.5 };
-	std::cout << x << " / " << y << " == " << x / y << " Expected: {2, 0}\n";
-	std::cout << std::endl;
+    Complex c6{};
+    CHECK(c6.re == 0);
+    CHECK(c6.im == 0);
+}
 
-	// сумма вещественного и комплексного
-	d = 2.5;
-	x = Complex{ 1.5, 1.0 };
-	std::cout << d << " + " << x << " == " << d + x << " Expected: {4.0, 1.0}\n";
-	std::cout << std::endl;
+TEST_CASE("Constructor with move semantics") {
+    Complex c1(1, 2);
+    Complex c2(std::move(c1));
+    CHECK(c2.re == 1);
+    CHECK(c2.im == 2);
 
-	// разность вещественного и комплексного
-	d = 4.5;
-	x = Complex{ 12, 35 };
-	std::cout << d << " - " << x << " == " << d - x << " Expected: {-7.5, -35}\n";
-	std::cout << std::endl;
+    Complex c3 = std::move(c2);
+    CHECK(c3.re == 1);
+    CHECK(c3.im == 2);
 
-	// разность комплексного и вещественного
-	x = Complex{ 3.0, -2.0 };
-	d = 1.5;
-	std::cout << x << " - " << d << " == " << x - d << " Expected: {1.5, -2}\n";
-	std::cout << std::endl;
+    Complex&& c4 = Complex(1, 2);
+    CHECK(c4.re == 1);
+    CHECK(c4.im == 2);
+}
 
-	// произведение вещественного и комплексного
-	d = 2.0;
-	x = Complex{ 1.5, -1.0 };
-	std::cout << d << " * " << x << " == " << d * x << " Expected: {3.0, -2.0}\n";
-	std::cout << std::endl;
+TEST_CASE("Testing Complex class") {
+    Complex c1(3, 4);
+    Complex c2(1, 2);
 
-	// частное вещественного и комплексного
-	d = 4.0;
-	x = Complex{ 2.0, -1.0 };
-	std::cout << d << " / " << x << " == " << d / x << " Expected: {1.6, 0.8}\n";
-	std::cout << std::endl;
+    SUBCASE("Test operator-") {
+        Complex c = -c1;
+        CHECK(c.re == -3);
+        CHECK(c.im == -4);
+    }
 
-	// частное комплексного и вещественного
-	x = Complex{ -4.0, 5.5 };
-	d = 2.5;
-	std::cout << x << " / " << d << " == " << x / d << " Expected: {-1.6, 2.2}\n";
-	std::cout << std::endl;
+    SUBCASE("Test operator+") {
+        Complex c = c1 + c2;
+        CHECK(c.re == 4);
+        CHECK(c.im == 6);
+    }
 
-	// присваивание комплексному вещественного, а потом комплексному
-	d = 43.23;
-	x = Complex{ 1, 1 };
-	y = Complex{ 12, 33 };
-	x = d;
-	std::cout << x << " Expected: {43.23,0}\n";
-	x = y;
-	std::cout << x << " Expected: {12, 33}\n";
-	std::cout << std::endl;
+    SUBCASE("Test operator-") {
+        Complex c = c1 - c2;
+        CHECK(c.re == 2);
+        CHECK(c.im == 2);
+    }
 
-	// деление с присваиванием для двух комплексных
-	x = Complex{ 11.1, 9.8 };
-	y = Complex{ 7, -9 };
-	x /= y;
-	std::cout << x << " Expected: {-0.0807,1.2961}\n";
-	std::cout << std::endl;
+    SUBCASE("Test operator*") {
+        Complex c = c1 * c2;
+        CHECK(c.re == -5);
+        CHECK(c.im == 10);
+    }
 
-	// деление с присваиванием комплексного и вещественного
-	x = Complex{ 100, 90 };
-	d = 10.0;
-	x /= d;
-	std::cout << x << " Expected: {10,9}\n";
-	std::cout << std::endl;
+    SUBCASE("Test operator/") {
+        Complex c = c1 / c2;
+        CHECK(c.re == 2.2);
+        CHECK(c.im == -0.4);
+    }
 
-	// сумма с присваиванием двух комплексных
-	x = Complex{ 1.12, 2.49 };
-	y = Complex{ 1.88, 2.51 };
-	x += y;
-	std::cout << x << " Expected: {3,5}\n";
-	std::cout << std::endl;
+    SUBCASE("Test operator+=") {
+        Complex c = c1;
+        c += c2;
+        CHECK(c.re == 4);
+        CHECK(c.im == 6);
+    }
 
-	// разность с присваиванием двух комплексных
-	x -= y;
-	std::cout << x << " Expected: {1.12,2.49}\n";
-	std::cout << std::endl;
+    SUBCASE("Test operator-=") {
+        Complex c = c1;
+        c -= c2;
+        CHECK(c.re == 2);
+        CHECK(c.im == 2);
+    }
 
-	// произведение с присваиванием двух комплексных
-	x *= y;
-	std::cout << x << " Expected: {-4.1443,7.4924}\n";
-	std::cout << std::endl;
+    SUBCASE("Test operator*=") {
+        Complex c = c1;
+        c *= c2;
+        CHECK(c.re == -5);
+        CHECK(c.im == 10);
+    }
 
-	// сумма с присваиванием для комплексного и вещественного
-	x = Complex{ 1,1 };
-	d = 2.0;
-	x += d;
-	std::cout << x << " Expected: {3, 1}\n";
-	std::cout << std::endl;
+    SUBCASE("Test operator/=") {
+        Complex c = c1;
+        c /= c2;
+        CHECK(c.re == 2.2);
+        CHECK(c.im == -0.4);
+    }
 
-	// разность с присваиванием для комплексного и вещественного
-	x -= d;
-	std::cout << x << " Expected: {1,1}\n";
-	std::cout << std::endl;
+    SUBCASE("Test operator==") {
+        CHECK(c1 == c1);
+        CHECK(c1 != c2);
+    }
 
-	// деление с присваиванием для комплексного и вещественного
-	x /= d;
-	std::cout << x << " Expected: {0.5,0.5}\n";
-	std::cout << std::endl;
+    SUBCASE("Test operator<<") {
+        std::stringstream ss;
+        ss << c1;
+        CHECK(ss.str() == "{3,4}");
+    }
 
-	// проверка равенства для вещественного и комплексного
-	d = 12.5;
-	x = Complex{ 12.5, 12.5 };
-	std::cout << (d == x) << " Expected: 0\n";
-	std::cout << (x == d) << " Expected: 0\n";
-	std::cout << (d != x) << " Expected: 1\n";
-	std::cout << (x != d) << " Expected: 1\n";
-	std::cout << std::endl;
+    SUBCASE("Test operator>>") {
+        std::stringstream ss;
+        ss << "{3,4}";
+        Complex c{ 0 };
+        ss >> c;
+        CHECK(c.re == 3);
+        CHECK(c.im == 4);
+    }
+}
 
-	// проверка равенства для двух комплексных
-	y = Complex{ 12.5, 12.5 };
-	x = Complex{ 12.5, 12.5 };
-	std::cout << (y == x) << " Expected: 1\n";
-	std::cout << (x == y) << " Expected: 1\n";
-	std::cout << (y != x) << " Expected: 0\n";
-	std::cout << (x != y) << " Expected: 0\n";
-	std::cout << std::endl;
+TEST_CASE("Test Complex class with double") {
+    Complex c1(3, 4);
+    double d = 2;
 
-	// проверка равенства для двух комплексных
-	y = Complex{ 1,1 };
-	std::cout << (y == x) << " Expected: 0\n";
-	std::cout << (x == y) << " Expected: 0\n";
-	std::cout << (y != x) << " Expected: 1\n";
-	std::cout << (x != y) << " Expected: 1\n";
-	std::cout << std::endl;
+    SUBCASE("Test operator+") {
+        Complex c = c1 + d;
+        CHECK(c.re == 5);
+        CHECK(c.im == 4);
+    }
 
-	// проверка деления комплексных на ноль
-	x = Complex{ 2, 1.1 };
-	y = Complex{ 0, 0 };
-	d = 0;
-	try {
-		std::cout << x / y << "\n";
-	}
-	catch (std::overflow_error& e) {
-		std::cout << x << " / " << y << " --> " << e.what() << "\n";
-	}
-	std::cout << std::endl;
+    SUBCASE("Test operator-") {
+        Complex c = c1 - d;
+        CHECK(c.re == 1);
+        CHECK(c.im == 4);
+    }
 
-	// получение реальной и мнимой части
-	x = Complex{ 4.1, 2 };
-	std::cout << x << " --> " << x.getRe() << "\n";
-	std::cout << x << " --> " << x.getIm() << "\n";
+    SUBCASE("Test operator*") {
+        Complex c = c1 * d;
+        CHECK(c.re == 6);
+        CHECK(c.im == 8);
+    }
 
-	// унарный минус
-	x = Complex{ 1.5, -2 };
-	std::cout << -x << " Expected: {-1.5,2}\n";
+    SUBCASE("Test operator/") {
+        Complex c = c1 / d;
+        CHECK(c.re == 1.5);
+        CHECK(c.im == 2);
+    }
 
-	return 0;
+    SUBCASE("Test operator+=") {
+        Complex c = c1;
+        c += d;
+        CHECK(c.re == 5);
+        CHECK(c.im == 4);
+    }
+
+    SUBCASE("Test operator-=") {
+        Complex c = c1;
+        c -= d;
+        CHECK(c.re == 1);
+        CHECK(c.im == 4);
+    }
+
+    SUBCASE("Test operator*=") {
+        Complex c = c1;
+        c *= d;
+        CHECK(c.re == 6);
+        CHECK(c.im == 8);
+    }
+
+    SUBCASE("Test operator/=") {
+        Complex c = c1;
+        c /= d;
+        CHECK(c.re == 1.5);
+        CHECK(c.im == 2);
+    }
+
+    SUBCASE("Test operator==") {
+        CHECK(c1 == c1);
+        CHECK(c1 != Complex(d));
+    }
+
+    SUBCASE("Test operator<<") {
+        std::stringstream ss;
+        ss << c1;
+        CHECK(ss.str() == "{3,4}");
+    }
+
+    SUBCASE("Test operator>>") {
+        std::stringstream ss;
+        ss << "{3,4}";
+        Complex c{ 0 };
+        ss >> c;
+        CHECK(c.re == 3);
+        CHECK(c.im == 4);
+    }
 }
