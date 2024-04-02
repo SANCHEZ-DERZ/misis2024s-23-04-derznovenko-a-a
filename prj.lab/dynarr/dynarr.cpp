@@ -2,11 +2,6 @@
 #include <algorithm>
 #include <stdexcept>
 
-DynArr::DynArr() {
-	size_ = 0;
-	data_ = nullptr;
-	capacity_ = 0;
-}
 
 
 DynArr& DynArr::operator=(const DynArr& arr) {
@@ -37,17 +32,25 @@ DynArr::DynArr(std::ptrdiff_t size) {
 	}
 	else {
 		size_ = size;
-		capacity_ = size_ * 2;
-		data_ = new float[capacity_] {};
+		capacity_ = (capacity_ > 2 * size_ ? capacity_ : 2 * size_);
+		data_ = new float[capacity_];
+		for (int i = 0; i < size_; i++) {
+			data_[i] = 0;
+		}
 	}
 }
 
 DynArr::DynArr(const DynArr& rhs) {
-	data_ = nullptr;
-	capacity_ = rhs.capacity_;
-	size_ = rhs.size_;
-	data_ = new float[capacity_];
-	std::copy(rhs.data_, rhs.data_ + rhs.capacity_, data_);
+	if (rhs.size_ <= 0) {
+		throw std::invalid_argument("It is impossible to create an array of this size");
+	}
+	else {
+		data_ = nullptr;
+		capacity_ = rhs.capacity_;
+		size_ = rhs.size_;
+		data_ = new float[capacity_];
+		std::copy(rhs.data_, rhs.data_ + rhs.capacity_, data_);
+	}
 }
 
 DynArr::~DynArr() {
@@ -61,15 +64,31 @@ void DynArr::Resize(const std::ptrdiff_t size) {
 	if (size <= 0) {
 		throw std::invalid_argument("Size should be positive number");
 	}
-	if (size < size_) {
-		size_ = size;
-	}
 	else {
-		float* buf = new float[size * 2] {};
-		std::copy(data_, data_ + capacity_, buf);
-		std::swap(data_, buf);
-		capacity_ = size * 2;
-		size_ = size;
+		if (size <= size_) {
+			size_ = size;
+		}
+		else {
+			if (size <= capacity_) {
+				for (std::ptrdiff_t i = size_; i < size; i++) {
+					data_[i] = 0;
+				}
+				size_ = size;
+			}
+			else {
+				capacity_ = size * 2;
+				float* new_data = new float[capacity_];
+				for (std::ptrdiff_t i = 0; i < size; i++) {
+					new_data[i] = 0;
+				}
+				for (std::ptrdiff_t i = 0; i < size_; i++) {
+					new_data[i] = data_[i];
+				}
+				size_ = size;
+				delete[] data_;
+				data_ = new_data;
+			}
+		}
 	}
 }
 

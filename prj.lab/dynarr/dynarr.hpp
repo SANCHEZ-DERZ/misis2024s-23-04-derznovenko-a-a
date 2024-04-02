@@ -8,11 +8,11 @@ class DynArr {
 
 private:
 	std::ptrdiff_t size_ = 0;
-	float* data_ = 0;
+	float* data_ = nullptr;
 	std::ptrdiff_t capacity_ = 0;
 
 public:
-	DynArr();
+	DynArr() = default;
 	~DynArr();
 	DynArr(const DynArr&);
 	DynArr(const std::ptrdiff_t size);

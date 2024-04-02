@@ -32,20 +32,22 @@ TEST_CASE("cons") {
         CHECK(b[0] == 6);
         CHECK(a[0] == 0);
     }
+    SUBCASE("check error")
+    {
+        CHECK_THROWS(DynArr(-1));
+    }
 }
 
 TEST_CASE("appr") {
     SUBCASE("appr with empty") {
         DynArr a;
         DynArr b(5);
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < 5; ++i)
             b[i] = i;
-        }
         a = b;
         CHECK(a.Size() == 5);
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < 5; ++i)
             CHECK(a[i] == i);
-        }
     }
     SUBCASE("appr with full") {
         DynArr a(5);
