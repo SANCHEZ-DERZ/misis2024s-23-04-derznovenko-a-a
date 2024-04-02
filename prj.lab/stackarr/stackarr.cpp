@@ -25,9 +25,7 @@ StackArr::StackArr(StackArr&& rhs) noexcept {
 
 
 StackArr::~StackArr() {
-	if (data_) {
-		delete[] data_;
-	}
+	delete[] data_;
 }
 
 
@@ -56,12 +54,7 @@ StackArr& StackArr::operator=(StackArr&& rhs) noexcept {
 
 
 bool StackArr::IsEmpty() const noexcept {
-	if (i_top_ == -1) {
-		return true;
-	}
-	else {
-		return false;
-	}
+	return i_top_ < 0;
 }
 
 
@@ -94,8 +87,8 @@ void StackArr::Push(const Complex& val) {
 		}
 	}
 	else {
-		size_ += 1;
 		i_top_ += 1;
+		size_ = 8;
 		data_ = new Complex[size_];
 		data_[i_top_] = val;
 	}
@@ -103,7 +96,7 @@ void StackArr::Push(const Complex& val) {
 
 
 void StackArr::Pop() noexcept {
-	if (size_ != 0) {
+	if (!IsEmpty()) {
 		i_top_ -= 1;
 	}
 }
