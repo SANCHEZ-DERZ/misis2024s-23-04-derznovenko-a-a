@@ -66,12 +66,12 @@ void QueueLstPr::Push(const float& val) {
 		head_ = tail_;
 	}
 	else {
-		if (head_->item > val) {
+		if (head_->item >= val) {
 			Node* new_head = new Node{ val };
 			new_head->next = head_;
 			head_ = new_head;
 		}
-		else if (tail_->item < val) {
+		else if (tail_->item <= val) {
 			tail_->next = new Node{ val };
 			tail_ = tail_->next;
 		}
