@@ -52,5 +52,43 @@ TEST_CASE("OPERATOR==") {
 
 
 TEST_CASE("OPERATOR!=") {
-	
+	BitSet a(1);
+	BitSet b(a);
+	a.Set(10, 1);
+	CHECK_EQ(a != b, 1);
+}
+
+
+TEST_CASE("Fill") {
+	BitSet a(100);
+	a.Fill(1);
+	for (int i = 0; i < a.Size() * 32; i++) {
+		CHECK(a.Get(i) == 1);
+	}
+}
+
+
+TEST_CASE("Operator~") {
+	BitSet a(100);
+	for (int i = 0; i < a.Size() * 32; i++) {
+		if (i % 2 == 0) {
+			a.Set(i, 1);
+		}
+	}
+	for (int i = 0; i < a.Size() * 32; i++) {
+		if (i % 2 == 0) {
+			CHECK(a.Get(i) == 1);
+		}
+		else {
+			CHECK(a.Get(i) == 0);
+		}
+	}
+	for (int i = 0; i < a.Size() * 32; i++) {
+		if (i % 2 == 0) {
+			CHECK(a.Get(i) == 0);
+		}
+		else {
+			CHECK(a.Get(i) == 1);
+		}
+	}
 }

@@ -34,7 +34,7 @@ public:
 
 	void Set(const int32_t idx, const bool val);
 
-	//void Fill(const bool val) noexcept;
+	void Fill(const bool val) noexcept;
 
 	//[[nodiscard]] BitSet& operator&=(const BitSet& rhs);
 

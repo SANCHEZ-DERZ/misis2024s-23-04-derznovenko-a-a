@@ -1,19 +1,8 @@
 #include "stacklst/stacklst.hpp"
 
 
-StackLst::StackLst() {
-	head_ = nullptr;
-	size_ = 0;
-}
-
-
 bool StackLst::IsEmpty() const noexcept {
-	if (head_ == nullptr) {
-		return true;
-	}
-	else {
-		return false;
-	}
+	return head_ == nullptr;
 }
 
 
@@ -47,9 +36,7 @@ void StackLst::Pop() noexcept {
 void StackLst::Push(const Complex& val) {
 	Node* new_head = new Node;
 	new_head->item = val;
-	if (head_ != nullptr) {
-		new_head->next = head_;
-	}
+	new_head->next = head_;
 	head_ = new_head;
 	size_ += 1;
 }
@@ -73,17 +60,18 @@ const Complex& StackLst::Top() const {
 }
 
 
-StackLst& StackLst::operator=(const StackLst& lst) {
-	if (this != &lst) {
-		StackLst new_lst;
-		Node* new_head = lst.head_;
-		for (int i = 0; i < lst.size_; i++) {
-			new_lst.Push(new_head->item);
-			new_head = new_head->next;
-		}
-		for (int i = 0; i < lst.size_; i++) {
-			this->Push(new_head->item);
-			new_head = new_head->next;
+StackLst& StackLst::operator=(const StackLst& other) {
+	if (!other.IsEmpty()) {
+		head_ = new Node;
+		head_->item = other.head_->item;
+		Node* temp = other.head_;
+		Node* prev = head_;
+		while (temp->next != nullptr) {
+			temp = temp->next;
+			Node* curr = new Node;
+			prev->next = curr;
+			curr->item = temp->item;
+			prev = curr;
 		}
 	}
 	return *this;
@@ -94,12 +82,19 @@ StackLst::~StackLst() {
 }
 
 
-StackLst::StackLst(const StackLst& lst) {
-	size_ = lst.size_;
-	Node* new_head = lst.head_;
-	for (int i = 0; i < size_; i++) {
-		this->Push(new_head->item);
-		new_head = head_->next;
+StackLst::StackLst(const StackLst& other) {
+	if (!other.IsEmpty()) {
+		head_ = new Node;
+		head_->item = other.head_->item;
+		Node* temp = other.head_;
+		Node* prev = head_;
+		while (temp->next != nullptr) {
+			temp = temp->next;
+			Node* curr = new Node;
+			prev->next = curr;
+			curr->item = temp->item;
+			prev = curr;
+		}
 	}
 }
 
@@ -112,6 +107,7 @@ StackLst::StackLst(StackLst&& rhs) noexcept {
 
 StackLst& StackLst::operator=(StackLst&& rhs) noexcept {
 	if (this != &rhs) {
+		Clear();
 		head_ = rhs.head_;
 		rhs.head_ = nullptr;
 	}

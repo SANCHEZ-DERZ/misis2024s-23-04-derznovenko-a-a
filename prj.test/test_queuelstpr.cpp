@@ -2,7 +2,7 @@
 #include "doctest.h"
 #include "queuelstpr/queuelstpr.hpp"
 
-TEST_CASE("Testing QueueLstPr") {
+TEST_CASE("Testing QueueLstsPr") {
     QueueLstPr queue;
 
     SUBCASE("Testing IsEmpty() on an empty queue") {

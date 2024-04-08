@@ -7,7 +7,7 @@
 
 class StackLst {
 public:
-	StackLst();
+	StackLst() = default;
 
 	StackLst(const StackLst& lst);
 
