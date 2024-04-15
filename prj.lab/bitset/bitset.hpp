@@ -36,13 +36,13 @@ public:
 
 	void Fill(const bool val) noexcept;
 
-	//[[nodiscard]] BitSet& operator&=(const BitSet& rhs);
+	[[nodiscard]] BitSet& operator&=(const BitSet& rhs);
 
-	//[[nodiscard]] BitSet& operator|=(const BitSet& rhs);
+	[[nodiscard]] BitSet& operator|=(const BitSet& rhs);
 
-	//[[nodiscard]] BitSet& operator^=(const BitSet& rhs);
+	[[nodiscard]] BitSet& operator^=(const BitSet& rhs);
 
-	//[[nodiscard]] BitSet operator~();
+	[[nodiscard]] BitSet operator~();
 
 	// ? operator[](const int32_t) - what can return
 	// std::ostream& WriteTxt(std::ostream&)
@@ -57,10 +57,10 @@ private:
 // std::ostream& operaror<<(std::ostream&, const BitSet&);
 // std::istream& operaror>>(std::istream&, BitSet&);
 
-//[[nodiscard]] BitSet operator&(const BitSet& lhs, const BitSet& rhs);
+[[nodiscard]] BitSet operator&(const BitSet& lhs, const BitSet& rhs);
 
-//[[nodiscard]] BitSet operator|(const BitSet& lhs, const BitSet& rhs);
+[[nodiscard]] BitSet operator|(const BitSet& lhs, const BitSet& rhs);
 
-//[[nodiscard]] BitSet operator^(const BitSet& lhs, const BitSet& rhs);
+[[nodiscard]] BitSet operator^(const BitSet& lhs, const BitSet& rhs);
 
 #endif

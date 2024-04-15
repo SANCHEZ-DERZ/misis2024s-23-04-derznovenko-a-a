@@ -111,25 +111,83 @@ void BitSet::Fill(const bool val) noexcept {
 }
 
 
-/*BitSet BitSet::operator~() {
-	if (size_ == 0) {
-		throw std::invalid_argument("Operator~ is not usable for empty bitset.");
+BitSet BitSet::operator~() {
+	BitSet new_bs(size_);
+	for (int i = 0; i < size_; i++) {
+		new_bs.bits_[i] = ~bits_[i];
+	}
+	return new_bs;
+}
+
+
+
+BitSet& BitSet::operator&=(const BitSet& rhs) {
+	if (size_ != rhs.size_) {
+		throw std::invalid_argument("Bitsets must have the same sizes.");
 	}
 	else {
-		for (int i = 0; i < size_ * 32; i++) {
-			if (Get(i) == 1) {
-				Set(i, 0);
-			}
-			else {
-				Set(i, 1);
-			}
+		for (int i = 0; i < size_; i++) {
+			bits_[i] = bits_[i] & rhs.bits_[i];
 		}
+		return *this;
 	}
 }
-*/
 
 
-/*BitSet& BitSet::operator&=(const BitSet& rhs) {
-	for (int i)
+BitSet& BitSet::operator|=(const BitSet& rhs) {
+	if (size_ != rhs.size_) {
+		throw std::invalid_argument("Bitsets must have the same sizes.");
+	}
+	else {
+		for (int i = 0; i < size_; i++) {
+			bits_[i] = bits_[i] | rhs.bits_[i];
+		}
+		return *this;
+	}
 }
-*/
+
+
+BitSet& BitSet::operator^=(const BitSet& rhs) {
+	if (size_ != rhs.size_) {
+		throw std::invalid_argument("Bitsets must have the same sizes.");
+	}
+	else {
+		for (int i = 0; i < size_; i++) {
+			bits_[i] = bits_[i] ^ rhs.bits_[i];
+		}
+		return *this;
+	}
+}
+
+
+BitSet operator&(const BitSet& lhs, const BitSet& rhs) {
+	if (lhs.Size() != rhs.Size()) {
+		throw std::invalid_argument("Bitsets must have the same sizes.");
+	}
+	else {
+		BitSet result(lhs);
+		return result &= rhs;
+	}
+}
+
+
+BitSet operator|(const BitSet& lhs, const BitSet& rhs) {
+	if (lhs.Size() != rhs.Size()) {
+		throw std::invalid_argument("Bitsets must have the same sizes.");
+	}
+	else {
+		BitSet result(lhs);
+		return result |= rhs;
+	}
+}
+
+
+BitSet operator^(const BitSet& lhs, const BitSet& rhs) {
+	if (lhs.Size() != rhs.Size()) {
+		throw std::invalid_argument("Bitsets must have the same sizes.");
+	}
+	else {
+		BitSet result(lhs);
+		return result ^= rhs;
+	}
+}

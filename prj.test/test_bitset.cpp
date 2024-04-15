@@ -69,7 +69,7 @@ TEST_CASE("Fill") {
 
 
 TEST_CASE("Operator~") {
-	BitSet a(100);
+	BitSet a(5);
 	for (int i = 0; i < a.Size() * 32; i++) {
 		if (i % 2 == 0) {
 			a.Set(i, 1);
@@ -83,6 +83,7 @@ TEST_CASE("Operator~") {
 			CHECK(a.Get(i) == 0);
 		}
 	}
+	a = ~a;
 	for (int i = 0; i < a.Size() * 32; i++) {
 		if (i % 2 == 0) {
 			CHECK(a.Get(i) == 0);
@@ -90,5 +91,71 @@ TEST_CASE("Operator~") {
 		else {
 			CHECK(a.Get(i) == 1);
 		}
+	}
+}
+
+
+TEST_CASE("Operator&=") {
+	BitSet a(5);
+	for (int i = 0; i < a.Size() * 32; i++) {
+		if (i % 2 == 0) {
+			a.Set(i, 1);
+		}
+	}
+	BitSet b(4);
+	CHECK_THROWS(a &= b);
+	b.Resize(5);
+	for (int i = 0; i < b.Size() * 32; i++) {
+		if (i % 2 != 0) {
+			b.Set(i, 1);
+		}
+	}
+	a &= b;
+	for (int i = 0; i < a.Size() * 32; i++) {
+		CHECK(a.Get(i) == 0);
+	}
+}
+
+
+TEST_CASE("Operator|=") {
+	BitSet a(5);
+	for (int i = 0; i < a.Size() * 32; i++) {
+		if (i % 2 == 0) {
+			a.Set(i, 1);
+		}
+	}
+	BitSet b(4);
+	CHECK_THROWS(a |= b);
+	b.Resize(5);
+	for (int i = 0; i < b.Size() * 32; i++) {
+		if (i % 2 != 0) {
+			b.Set(i, 1);
+		}
+	}
+	a |= b;
+	for (int i = 0; i < a.Size() * 32; i++) {
+		CHECK(a.Get(i) == 1);
+	}
+}
+
+
+TEST_CASE("Operator^=") {
+	BitSet a(5);
+	for (int i = 0; i < a.Size() * 32; i++) {
+		if (i % 2 == 0) {
+			a.Set(i, 1);
+		}
+	}
+	BitSet b(4);
+	CHECK_THROWS(a ^= b);
+	b.Resize(5);
+	for (int i = 0; i < b.Size() * 32; i++) {
+		if (i % 2 == 0) {
+			b.Set(i, 1);
+		}
+	}
+	a ^= b;
+	for (int i = 0; i < a.Size() * 32; i++) {
+		CHECK(a.Get(i) == 0);
 	}
 }
