@@ -41,7 +41,7 @@ template <typename T>
 StackArrT<T>::StackArrT(const StackArrT& arr) {
 	i_top_ = arr.i_top_;
 	size_ = arr.size_;
-	data_ = new Complex[size_];
+	data_ = new T[size_];
 	std::copy(arr.data_, arr.data_ + arr.size_, data_);
 }
 
@@ -63,7 +63,7 @@ StackArrT<T>& StackArrT<T>::operator=(const StackArrT& arr) {
 		size_ = arr.size_;
 		i_top_ = arr.i_top_;
 		delete[] data_;
-		data_ = new Complex[size_]{};
+		data_ = new T[size_]{};
 		for (int i = 0; i < size_; i++) {
 			data_[i] = arr.data_[i];
 		}
@@ -106,7 +106,7 @@ void StackArrT<T>::Push(const T& val) {
 		else {
 			i_top_ += 1;
 			size_ = i_top_ * 2;
-			Complex* new_data = new Complex[size_];
+			T* new_data = new T[size_];
 			for (int i = 0; i < size_; i++) {
 				new_data[i] = data_[i];
 			}
@@ -118,7 +118,7 @@ void StackArrT<T>::Push(const T& val) {
 	else {
 		i_top_ += 1;
 		size_ = 8;
-		data_ = new Complex[size_];
+		data_ = new T[size_];
 		data_[i_top_] = val;
 	}
 }

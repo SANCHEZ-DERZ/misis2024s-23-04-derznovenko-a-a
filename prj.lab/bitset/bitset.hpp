@@ -44,11 +44,25 @@ public:
 
 	[[nodiscard]] BitSet operator~();
 
-	// ? operator[](const int32_t) - what can return
+	class BIA {
+	public:
+		BIA() = delete;
+		BIA(BitSet& bitset, const uint32_t idx) : bitset_{ bitset }, idx_{ idx } {};
+		BIA operator=(const BIA);
+		BIA operator=(const bool val);
+		operator bool() const;
+		~BIA() = default;
+	private:
+		BitSet& bitset_;
+		uint32_t idx_ = 0;
+	};
+
+	BIA operator[](const int32_t);
+	const bool operator[](const std::int32_t idx) const;
 	// std::ostream& WriteTxt(std::ostream&)
 	// std::ostream& WriteBinary(std::ostream&)
 	// std::istream& ReadTxt(std::istream&)
-	// std::istream& RaadBinary(std::istream&)
+	// std::istream& ReadBinary(std::istream&)
 private:
 	std::int32_t size_ = 0;
 	std::vector<uint32_t> bits_;
