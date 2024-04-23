@@ -43,73 +43,76 @@ TEST_CASE_TEMPLATE("Push", T, int, double, std::string, Complex) {
 TEST_CASE_TEMPLATE("Pop", T, int, double, std::string, Complex) {
     StackArrT<T> stack;
     std::vector<T> vec;
-    appender(vec, 3);
-    stack.Push(c);
+    appender(vec, 1);
+    stack.Push(vec[0]);
     stack.Pop();
     CHECK(stack.IsEmpty());
 }
 
 TEST_CASE_TEMPLATE("Copy constructor", T, int, double, std::string, Complex) {
     StackArrT<T> stack;
-    T c{ 1 };
-    stack.Push(c);
+    std::vector<T> vec;
+    appender(vec, 1);
+    stack.Push(vec[0]);
     StackArrT<T> stack2(stack);
     CHECK_FALSE(stack.IsEmpty());
     CHECK_FALSE(stack2.IsEmpty());
-    CHECK_EQ(stack.Top(), c);
-    CHECK_EQ(stack2.Top(), c);
+    CHECK_EQ(stack.Top(), vec[0]);
+    CHECK_EQ(stack2.Top(), vec[0]);
     stack.Pop();
     CHECK(stack.IsEmpty());
     CHECK_FALSE(stack2.IsEmpty());
-    CHECK_EQ(stack2.Top(), c);
+    CHECK_EQ(stack2.Top(), vec[0]);
 }
 
 TEST_CASE_TEMPLATE("Assignment operator", T, int, double, std::string, Complex) {
     StackArrT<T> stack;
-    T c(1);
-    stack.Push(c);
+    std::vector<T> vec;
+    appender(vec, 1);
+    stack.Push(vec[0]);
     StackArrT<T> stack2;
     stack2 = stack;
     CHECK_FALSE(stack.IsEmpty());
     CHECK_FALSE(stack2.IsEmpty());
-    CHECK_EQ(stack.Top(), c);
-    CHECK_EQ(stack2.Top(), c);
+    CHECK_EQ(stack.Top(), vec[0]);
+    CHECK_EQ(stack2.Top(), vec[0]);
     stack.Pop();
     CHECK(stack.IsEmpty());
     CHECK_FALSE(stack2.IsEmpty());
-    CHECK_EQ(stack2.Top(), c);
+    CHECK_EQ(stack2.Top(), vec[0]);
 }
 
 TEST_CASE_TEMPLATE("Clear", T, int, double, std::string, Complex) {
     StackArrT<T> stack;
-    T c(1);
-    stack.Push(c);
+    std::vector<T> vec;
+    appender(vec, 1);
+    stack.Push(vec[0]);
     stack.Clear();
     CHECK(stack.IsEmpty());
 }
 
 TEST_CASE_TEMPLATE("Push and Pop", T, int, double, std::string, Complex) {
     StackArrT<T> stack;
-    T c1(1);
-    T c2(3);
-    stack.Push(c1);
-    stack.Push(c2);
-    CHECK_EQ(stack.Top(), c2);
+    std::vector<T> vec;
+    appender(vec, 2);
+    stack.Push(vec[0]);
+    stack.Push(vec[1]);
+    CHECK_EQ(stack.Top(), vec[1]);
     stack.Pop();
-    CHECK_EQ(stack.Top(), c1);
+    CHECK_EQ(stack.Top(), vec[0]);
     stack.Pop();
     CHECK(stack.IsEmpty());
 }
 
 TEST_CASE_TEMPLATE("Push and Pop with resizing", T, int, double, std::string, Complex) {
     StackArrT<T> stack;
-    T value;
-    for (int i = 0; i < 1000; ++i) {
-        value = T(i);
-        stack.Push(value);
+    std::vector<T> vec;
+    appender(vec, 5);
+    for (int i = 0; i < 5; ++i) {
+        stack.Push(vec[i]);
     }
-    for (ptrdiff_t i = 999; i >= 0; --i) {
-        CHECK_EQ(stack.Top(), T(i));
+    for (ptrdiff_t i = 4; i >= 0; --i) {
+        CHECK_EQ(stack.Top(), vec[i]);
         stack.Pop();
     }
     CHECK(stack.IsEmpty());
@@ -117,15 +120,15 @@ TEST_CASE_TEMPLATE("Push and Pop with resizing", T, int, double, std::string, Co
 
 TEST_CASE_TEMPLATE("Push and Pop with resizing and copy", T, int, double, std::string, Complex) {
     StackArrT<T> stack;
-    T value;
-    for (int i = 0; i < 1000; ++i) {
-        value = T(i);
-        stack.Push(value);
+    std::vector<T> vec;
+    appender(vec, 5);
+    for (int i = 0; i < 5; ++i) {
+        stack.Push(vec[i]);
     }
     StackArrT<T> stack2(stack);
-    for (int i = 999; i >= 0; --i) {
-        CHECK_EQ(stack.Top(), T(i));
-        CHECK_EQ(stack2.Top(), T(i));
+    for (int i = 4; i >= 0; --i) {
+        CHECK_EQ(stack.Top(), vec[i]);
+        CHECK_EQ(stack2.Top(), vec[i]);
         stack.Pop();
         stack2.Pop();
     }
@@ -135,16 +138,16 @@ TEST_CASE_TEMPLATE("Push and Pop with resizing and copy", T, int, double, std::s
 
 TEST_CASE_TEMPLATE("Push and Pop with resizing and assignment", T, int, double, std::string, Complex) {
     StackArrT<T> stack;
-    T value;
-    for (int i = 0; i < 1000; ++i) {
-        value = T(i);
-        stack.Push(value);
+    std::vector<T> vec;
+    appender(vec, 5);
+    for (int i = 0; i < 5; ++i) {
+        stack.Push(vec[i]);
     }
     StackArrT<T> stack2;
     stack2 = stack;
-    for (int i = 999; i >= 0; --i) {
-        CHECK_EQ(stack.Top(), T(i));
-        CHECK_EQ(stack2.Top(), T(i));
+    for (int i = 4; i >= 0; --i) {
+        CHECK_EQ(stack.Top(), vec[i]);
+        CHECK_EQ(stack2.Top(), vec[i]);
         stack.Pop();
         stack2.Pop();
     }

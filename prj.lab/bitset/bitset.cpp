@@ -4,8 +4,8 @@
 #define BIT_32 32
 
 bool BitSet::Get(const int32_t idx) const {
-	if (size_ > 0 && idx < size_ * BIT_32 && idx * BIT_32 >= 0) {
-		std::int32_t num_idx = idx / BIT_32;
+	if (size_ > 0 && idx < size_ * BIT_32 && idx * BIT_32 >= 0) {  //  01110110
+		std::int32_t num_idx = idx / BIT_32;                       //  00010000
 		std::int32_t idx_in_num = idx - num_idx * BIT_32;
 		std::uint32_t finder = MAX >> idx_in_num;
 		bool bit = false;
