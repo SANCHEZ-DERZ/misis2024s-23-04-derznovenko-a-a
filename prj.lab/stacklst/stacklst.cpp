@@ -1,4 +1,4 @@
-#include "stacklst/stacklst.hpp"
+	#include "stacklst/stacklst.hpp"
 
 
 bool StackLst::IsEmpty() const noexcept {
@@ -18,17 +18,10 @@ Complex& StackLst::Top() {
 
 void StackLst::Pop() noexcept {
 	if (head_ != nullptr) {
-		if (head_->next != nullptr) {
-			Node* new_head = head_;
-			head_ = head_->next;
-			delete new_head;
-			size_ -= 1;
-		}
-		else {
-			delete head_;
-			head_ = nullptr;
-			size_ -= 1;
-		}
+		Node* new_head = head_;
+		head_ = head_->next;
+		delete new_head;
+		size_ -= 1;
 	}
 }
 
@@ -61,17 +54,20 @@ const Complex& StackLst::Top() const {
 
 
 StackLst& StackLst::operator=(const StackLst& other) {
-	if (!other.IsEmpty()) {
-		head_ = new Node;
-		head_->item = other.head_->item;
-		Node* temp = other.head_;
-		Node* prev = head_;
-		while (temp->next != nullptr) {
-			temp = temp->next;
-			Node* curr = new Node;
-			prev->next = curr;
-			curr->item = temp->item;
-			prev = curr;
+	if (this != &other) {
+		Clear();
+		if (!other.IsEmpty()) {
+			head_ = new Node;
+			head_->item = other.head_->item;
+			Node* temp = other.head_;
+			Node* prev = head_;
+			while (temp->next != nullptr) {
+				temp = temp->next;
+				Node* curr = new Node;
+				prev->next = curr;
+				curr->item = temp->item;
+				prev = curr;
+			}
 		}
 	}
 	return *this;

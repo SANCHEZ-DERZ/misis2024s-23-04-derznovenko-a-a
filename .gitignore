@@ -29,6 +29,5 @@
 # Executables
 *.exe
 *.out
-*.app
 /out
 /.vs
