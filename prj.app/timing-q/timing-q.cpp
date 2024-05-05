@@ -2,34 +2,40 @@
 #include <chrono>
 #include <stackarrt/stackarrt.hpp>
 #include <vector>
-#include <fstream>
+#include <iomanip>
 
 
-
-int main() {
+template <typename T>
+long double Time_of_push(T& stack, int num) {
 	std::chrono::time_point<std::chrono::high_resolution_clock> start, end;
-	StackArrT<int> stack;
-	std::chrono::duration<double> sum{ 0 };
-	std::vector<std::chrono::duration<double>> vec_of_time;
-	std::vector<std::chrono::duration<double>> vec_of_avg_time;
+	long double sum = 0;
+	std::vector<std::chrono::duration<long double>> vec_of_time;
+	std::vector<std::chrono::duration<long double>> vec_of_avg_time;
 	for (int i = 0; i < 100; i++) {
 		start = std::chrono::high_resolution_clock::now();
-		for (int j = 0; j < 1000000; j++) {
+		for (int j = 0; j < num; j++) {
 			stack.Push(j);
 		}
 		end = std::chrono::high_resolution_clock::now();
-		std::chrono::duration<double> elapsed_seconds = end - start;
-		elapsed_seconds = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-		sum += elapsed_seconds;
+		stack.Clear();
+		std::chrono::duration<long double> elapsed_seconds = end - start;
+		elapsed_seconds = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+		sum += elapsed_seconds.count();
 		vec_of_time.push_back(elapsed_seconds);
 	}
-	
-	/*for (int i = 0; i < vec_of_time.size(); i++) {
-		std::cout << "elapsed time: " << vec_of_time[i].count() << "ms\n";
-	}*/
-	std::chrono::duration<double> avg_time = sum / vec_of_time.size();
-	std::cout << "avg time: " << avg_time.count() << "ms" << "\n";
-	
+	long double avg_time = sum / vec_of_time.size();
+	return avg_time;
+}
+
+
+int main() {
+	StackArrT<int> Stack;
+	std::vector<long double> avg_times;
+	for (int i = 0; i < 100; i++) {
+		long double Time = Time_of_push(Stack, i);
+		std::cout << std::fixed << std::setprecision(10);
+		std::cout << Time << "\n";
+	}
 }
 
 
