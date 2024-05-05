@@ -98,29 +98,18 @@ T& StackArrT<T>::Top() {
 
 template <typename T>
 void StackArrT<T>::Push(const T& val) {
-	if (data_ != nullptr) {
-		if (size_ > i_top_ + 1) {
-			data_[i_top_ + 1] = val;
-			i_top_ += 1;
-		}
-		else {
-			i_top_ += 1;
-			size_ = i_top_ * 2;
-			T* new_data = new T[size_];
-			for (int i = 0; i < size_; i++) {
-				new_data[i] = data_[i];
-			}
-			delete[] data_;
-			data_ = new_data;
-			data_[i_top_] = val;
-		}
-	}
-	else {
-		i_top_ += 1;
-		size_ = 8;
+	if (nullptr == data_) {
+		size_ = 1;
 		data_ = new T[size_];
-		data_[i_top_] = val;
 	}
+	else if (size_ == i_top_ + 1) {
+		auto buf = new T[size_ * 2];
+		std::copy(data_, data_ + size_, buf);
+		std::swap(data_, buf);
+		delete[] buf;
+		size_ *= 2;
+	}
+	data_[++i_top_] = val;
 }
 
 template <typename T>
