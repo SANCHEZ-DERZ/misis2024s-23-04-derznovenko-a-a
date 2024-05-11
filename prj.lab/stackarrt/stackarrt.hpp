@@ -58,15 +58,19 @@ StackArrT<T>::~StackArrT() {
 }
 
 template <typename T>
-StackArrT<T>& StackArrT<T>::operator=(const StackArrT& arr) {
-	if (this != &arr) {
-		size_ = arr.size_;
-		i_top_ = arr.i_top_;
-		delete[] data_;
-		data_ = new T[size_]{};
-		for (int i = 0; i < size_; i++) {
-			data_[i] = arr.data_[i];
+StackArrT<T>& StackArrT<T>::operator=(const StackArrT& st) {
+	if (this != &st) {
+		if (st.IsEmpty()) {
+			Clear();
 		}
+		if (size_ <= st.i_top_) {
+			size_ = (st.i_top_ + 4) / 4 * 4;
+			T* buf = new T[size_];
+			std::swap(data_, buf);
+			delete[] buf;
+		}
+		i_top_ = st.i_top_;
+		std::copy(st.data_, st.data_ + i_top_ + 1, data_);
 	}
 	return *this;
 }
