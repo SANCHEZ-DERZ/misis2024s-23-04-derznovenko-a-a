@@ -4,3 +4,5 @@ target_link_libraries(timing-q complex)
 
 target_link_libraries(timing-q stacklstt)
 target_link_libraries(timing-q complex)
+
+target_link_libraries(timing-q matplot)
