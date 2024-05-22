@@ -14,6 +14,6 @@ std::istream& operator>>(std::istream& in, Roborun command) {
 }
 
 
-std::pair<double, double> Roborun::GOR(double x) noexcept {
-	point_.first = x;
-}
+//std::pair<double, double> Roborun::GOR(double x) noexcept {
+//	point_.first = x;
+//}
