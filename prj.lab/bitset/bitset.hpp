@@ -22,27 +22,27 @@ public:
 
 	~BitSet() = default;
 
-	[[nodiscard]] bool operator==(const BitSet& rhs) const noexcept;
+	bool operator==(const BitSet& rhs) const noexcept;
 
-	[[nodiscard]] bool operator!=(const BitSet& rhs) const noexcept;
+	bool operator!=(const BitSet& rhs) const noexcept;
 
 	int32_t Size() const noexcept { return size_; }
 
 	void Resize(const int32_t size); // 0 < size
 
-	[[nodiscard]] bool Get(const int32_t idx) const;
+	bool Get(const int32_t idx) const;
 
 	void Set(const int32_t idx, const bool val);
 
 	void Fill(const bool val) noexcept;
 
-	[[nodiscard]] BitSet& operator&=(const BitSet& rhs);
+	BitSet& operator&=(const BitSet& rhs);
 
-	[[nodiscard]] BitSet& operator|=(const BitSet& rhs);
+	BitSet& operator|=(const BitSet& rhs);
 
-	[[nodiscard]] BitSet& operator^=(const BitSet& rhs);
+	BitSet& operator^=(const BitSet& rhs);
 
-	[[nodiscard]] BitSet operator~();
+	BitSet operator~();
 
 	class BIA {
 	public:
@@ -71,10 +71,10 @@ private:
 // std::ostream& operaror<<(std::ostream&, const BitSet&);
 // std::istream& operaror>>(std::istream&, BitSet&);
 
-[[nodiscard]] BitSet operator&(const BitSet& lhs, const BitSet& rhs);
+BitSet operator&(const BitSet& lhs, const BitSet& rhs);
 
-[[nodiscard]] BitSet operator|(const BitSet& lhs, const BitSet& rhs);
+BitSet operator|(const BitSet& lhs, const BitSet& rhs);
 
-[[nodiscard]] BitSet operator^(const BitSet& lhs, const BitSet& rhs);
+BitSet operator^(const BitSet& lhs, const BitSet& rhs);
 
 #endif
